@@ -4,7 +4,7 @@ import { window } from '@kit.ArkUI';
 
 
 
-const DOMAIN = 0x0000;
+const DOMAIN = 0x0000;  //try123123212313213213
 
 export default class EntryAbility extends UIAbility {
 
