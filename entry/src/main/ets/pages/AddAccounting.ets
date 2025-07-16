@@ -85,6 +85,8 @@ export default struct AddAccounting{
   @State iconCurrentIndex : number = 0;//账单类别
   @State handlePopup1 : boolean = false
   @State handlePopup2 : boolean = false
+  @State currentAccountId: number = 1; // 假设默认账户ID为1，实际应由前端账户选择器控制
+
 
 
   // // 初始化数据库
@@ -243,7 +245,8 @@ export default struct AddAccounting{
       type: '支出',
       category: category,
       amount: parseFloat(this.amount),
-      remark: this.note
+      remark: this.note,
+      accountId: this.currentAccountId
     };
     
     return await insertBill(bill);
@@ -277,7 +280,8 @@ export default struct AddAccounting{
       type: '收入',
       category: category,
       amount: parseFloat(this.amount),
-      remark: this.note
+      remark: this.note,
+      accountId: this.currentAccountId
     };
     
     return await insertBill(bill);
