@@ -1,6 +1,9 @@
 {
   "src": [
     "pages/Index",
-    "pages/AddAccounting"
+    "pages/AddAccounting",
+    "pages/StatisticsPage",
+    "pages/Tabss",
+    "pages/HomePage"
   ]
 }
