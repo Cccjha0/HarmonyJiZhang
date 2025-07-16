@@ -1,7 +1,8 @@
 import router from '@ohos.router';
 import common from '@ohos.app.ability.common';
-import { BillRecord, billDBService, CategoryStatItem, StatisticsResult, StatisticsOptions } from '../common/BillDBService';
+import { BillRecord, CategoryStatItem, StatisticsResult, StatisticsOptions } from '../common/models/Bill';
 import promptAction from '@ohos.promptAction';
+import { billService, statisticsService } from '../common/AppServiceRegistry'
 
 //选择器选项接口
 interface SelectOption {
@@ -43,7 +44,6 @@ struct Index {
   @State statsUpdateTrigger: number = 0;
 
   aboutToAppear() {
-    this.initDatabase();
     // 初始化年份列表（近5年）
     const currentYear = new Date().getFullYear();
     this.yearList = Array.from<number, number>({length: 5}, (_, i) => currentYear - i);
@@ -72,17 +72,6 @@ struct Index {
     this.loadMonthlyStatistics(currentYear, currentMonth);
   }
 
-  async initDatabase() {
-    console.info('开始初始化数据库');
-    const context: common.UIAbilityContext = getContext(this) as common.UIAbilityContext;
-    const success: boolean = await billDBService.initDB(context);
-    console.info(`数据库初始化${success ? '成功' : '失败'}`);
-    if (success) {
-      const now = new Date();
-      this.loadBillsByMonth(now.getFullYear(), now.getMonth() + 1);
-    }
-  }
-
   async loadBills() {
     this.isLoading = true;
     try {
@@ -99,7 +88,7 @@ struct Index {
       console.info(`加载当月账单：${startDate} 至 ${endDate}`);
       
       // 使用日期范围过滤当月账单
-      this.bills = await billDBService.getAllBills({
+      this.bills = await billService.getBillsByOptions({
         startDate: startDate,
         endDate: endDate,
         sortBy: 'date',
@@ -128,7 +117,7 @@ struct Index {
     
     try {
       // 获取当月总收支统计
-      this.statistics = await billDBService.getStatistics({
+      this.statistics = await statisticsService.getStatistics({
         startDate: startDate,
         endDate: endDate
       });
@@ -145,14 +134,14 @@ struct Index {
     this.currentStatType = type;
     
     // 更新月度统计数据
-    this.categoryStats = await billDBService.getCategoryStatistics(type, dateRange);
+    this.categoryStats = await statisticsService.getCategoryStatistics(type, dateRange);
     
     // 如果是在统计页面，同时更新年度统计
     if (this.currentIndex === 1) {
       // 更新年度分类统计
       const yearStartDate = `${this.selectedYear}-01-01`;
       const yearEndDate = `${this.selectedYear}-12-31`;
-      this.yearlyStats = await billDBService.getCategoryStatistics(type, {
+      this.yearlyStats = await statisticsService.getCategoryStatistics(type, {
         startDate: yearStartDate,
         endDate: yearEndDate
       });
@@ -180,7 +169,7 @@ struct Index {
     .then(result => {
       // 点击删除按钮
       if (result.index === 1) {
-        billDBService.deleteBill(id).then(success => {
+        billService.deleteBill(id).then(success => {
           if (success) {
             // 刷新数据，确保统计数据也被刷新
             this.loadBillsByMonth(this.selectedDate.getFullYear(), this.selectedDate.getMonth() + 1);
@@ -348,11 +337,11 @@ struct Index {
     
     try {
       // 获取年度总收支统计
-      this.yearlyStatistics = await billDBService.getStatistics(options);
+      this.yearlyStatistics = await statisticsService.getStatistics(options);
       console.info(`${yearNum}年度统计数据: 收入${this.yearlyStatistics.totalIncome}, 支出${this.yearlyStatistics.totalExpense}`);
       
       // 获取年度分类统计
-      this.yearlyStats = await billDBService.getCategoryStatistics(this.currentStatType, options);
+      this.yearlyStats = await statisticsService.getCategoryStatistics(this.currentStatType, options);
       
       // 递增触发器，强制UI更新
       this.statsUpdateTrigger++;
@@ -389,11 +378,11 @@ struct Index {
     
     try {
       // 获取月度总收支统计
-      this.statistics = await billDBService.getStatistics(options);
+      this.statistics = await statisticsService.getStatistics(options);
       console.info(`${yearNum}年${monthNum}月统计数据: 收入${this.statistics.totalIncome}, 支出${this.statistics.totalExpense}`);
       
       // 获取月度分类统计
-      this.categoryStats = await billDBService.getCategoryStatistics(this.currentStatType, options);
+      this.categoryStats = await statisticsService.getCategoryStatistics(this.currentStatType, options);
       
       // 递增触发器，强制UI更新
       this.statsUpdateTrigger++;
@@ -426,7 +415,7 @@ struct Index {
       console.info(`加载${yearNum}年${monthNum}月账单：${startDate} 至 ${endDate}`);
       
       // 使用日期范围过滤指定月份账单
-      this.bills = await billDBService.getAllBills({
+      this.bills = await billService.getBillsByOptions({
         startDate: startDate,
         endDate: endDate,
         sortBy: 'date',
@@ -434,14 +423,14 @@ struct Index {
       });
       
       // 加载指定月份的统计数据
-      this.statistics = await billDBService.getStatistics({
+      this.statistics = await statisticsService.getStatistics({
         startDate: startDate,
         endDate: endDate
       });
       
       // 更新分类统计
       const dateRange: StatisticsOptions = { startDate, endDate };
-      this.categoryStats = await billDBService.getCategoryStatistics(this.currentStatType, dateRange);
+      this.categoryStats = await statisticsService.getCategoryStatistics(this.currentStatType, dateRange);
       
       // 递增触发器，强制UI更新
       this.statsUpdateTrigger++;

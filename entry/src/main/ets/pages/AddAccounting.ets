@@ -2,7 +2,8 @@ import router from '@ohos.router';
 import { Popup } from '@kit.ArkUI'
 import common from '@ohos.app.ability.common';
 import relationalStore from '@ohos.data.relationalStore';
-import { Bill, billDBService } from '../common/BillDBService';
+import { Bill,QueryBillOptions } from '../common/models/Bill';
+import { billService } from '../common/AppServiceRegistry';
 import promptAction from '@ohos.promptAction';
 
 interface BillRecord extends Bill {
@@ -26,7 +27,7 @@ interface QueryOptions {
 async function insertBill(bill: Bill): Promise<InsertResult> {
   try {
     console.info(`开始保存账单: ${JSON.stringify(bill)}`);
-    const id = await billDBService.addBill(bill);
+    const id = await billService.addBill(bill);
     console.info(`保存账单结果ID: ${id}`);
     return {
       success: id > 0,
@@ -42,9 +43,9 @@ async function insertBill(bill: Bill): Promise<InsertResult> {
 }
 
 // 查询账单
-async function queryBills(options?: QueryOptions): Promise<BillRecord[]> {
+async function queryBills(): Promise<BillRecord[]> {
   try {
-    return await billDBService.getAllBills(options);
+    return await billService.getAllBills();
   } catch (error) {
     console.error(`查询账单失败: ${JSON.stringify(error)}`);
     return [];
@@ -54,7 +55,7 @@ async function queryBills(options?: QueryOptions): Promise<BillRecord[]> {
 // 删除账单
 async function deleteBill(id: number): Promise<boolean> {
   try {
-    return await billDBService.deleteBill(id);
+    return await billService.deleteBill(id);
   } catch (error) {
     console.error(`删除账单失败: ${JSON.stringify(error)}`);
     return false;
@@ -64,7 +65,7 @@ async function deleteBill(id: number): Promise<boolean> {
 // 更新账单
 async function updateBill(id: number, bill: Partial<Bill>): Promise<boolean> {
   try {
-    return await billDBService.updateBill(id, bill);
+    return await billService.updateBill(id, bill);
   } catch (error) {
     console.error(`更新账单失败: ${JSON.stringify(error)}`);
     return false;
@@ -86,11 +87,11 @@ struct AddAccounting{
   @State handlePopup2 : boolean = false
 
 
-  // 初始化数据库
-  async aboutToAppear() {
-    const context = getContext(this) as common.UIAbilityContext;
-    await billDBService.initDB(context);
-  }
+  // // 初始化数据库
+  // async aboutToAppear() {
+  //   const context = getContext(this) as common.UIAbilityContext;
+  //   await billDBService.initDB(context);
+  // }
 
 
   // 支出、收入tab构建
