@@ -4,6 +4,7 @@ export interface Bill {
   category: string;
   amount: number;
   remark?: string;
+  accountId: number;
 }
 
 export interface BillRecord extends Bill {
@@ -21,6 +22,7 @@ export interface QueryBillOptions {
 export interface StatisticsOptions {
   startDate?: string;
   endDate?: string;
+  accountId?: number; 
 }
 
 export interface CategoryStatItem {

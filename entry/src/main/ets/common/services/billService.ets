@@ -26,7 +26,8 @@ export class BillService {
       TYPE: bill.type,
       CATEGORY: bill.category,
       AMOUNT: bill.amount,
-      REMARK: bill.remark || ''
+      REMARK: bill.remark || '',
+      ACCOUNT_ID: bill.accountId
     };
 
     try {
@@ -84,6 +85,7 @@ export class BillService {
     if (bill.category !== undefined) valuesBucket.CATEGORY = bill.category;
     if (bill.amount !== undefined) valuesBucket.AMOUNT = bill.amount;
     if (bill.remark !== undefined) valuesBucket.REMARK = bill.remark;
+    if (bill.accountId !== undefined) valuesBucket.ACCOUNT_ID = bill.accountId;
 
     const predicates = new relationalStore.RdbPredicates(this.tableName);
     predicates.equalTo('BILL_ID', id);
@@ -114,7 +116,7 @@ export class BillService {
     predicates.equalTo('BILL_ID', id);
 
     try {
-      const resultSet = await this.rdbStore.query(predicates, ['BILL_ID', 'DATE', 'TYPE', 'CATEGORY', 'AMOUNT', 'REMARK']);
+      const resultSet = await this.rdbStore.query(predicates, ['BILL_ID', 'DATE', 'TYPE', 'CATEGORY', 'AMOUNT', 'REMARK','ACCOUNT_ID']);
       if (resultSet.rowCount <= 0) {
         resultSet.close();
         return null;
@@ -127,7 +129,8 @@ export class BillService {
         type: resultSet.getString(resultSet.getColumnIndex('TYPE')) as '收入' | '支出',
         category: resultSet.getString(resultSet.getColumnIndex('CATEGORY')),
         amount: resultSet.getDouble(resultSet.getColumnIndex('AMOUNT')),
-        remark: resultSet.getString(resultSet.getColumnIndex('REMARK'))
+        remark: resultSet.getString(resultSet.getColumnIndex('REMARK')),
+        accountId: resultSet.getDouble(resultSet.getColumnIndex('ACCOUNT_ID'))
       };
 
       resultSet.close();
@@ -154,7 +157,7 @@ export class BillService {
     try {
       const resultSet = await this.rdbStore.query(
         predicates,
-        ['BILL_ID', 'DATE', 'TYPE', 'CATEGORY', 'AMOUNT', 'REMARK']
+        ['BILL_ID', 'DATE', 'TYPE', 'CATEGORY', 'AMOUNT', 'REMARK', 'ACCOUNT_ID']
       );
 
       const bills: BillRecord[] = [];
@@ -166,7 +169,8 @@ export class BillService {
           type: resultSet.getString(resultSet.getColumnIndex('TYPE')) as '收入' | '支出',
           category: resultSet.getString(resultSet.getColumnIndex('CATEGORY')),
           amount: resultSet.getDouble(resultSet.getColumnIndex('AMOUNT')),
-          remark: resultSet.getString(resultSet.getColumnIndex('REMARK'))
+          remark: resultSet.getString(resultSet.getColumnIndex('REMARK')),
+          accountId: resultSet.getDouble(resultSet.getColumnIndex('ACCOUNT_ID'))
         });
       }
 
@@ -217,7 +221,7 @@ export class BillService {
     try {
       const resultSet = await this.rdbStore.query(
         predicates,
-        ['BILL_ID', 'DATE', 'TYPE', 'CATEGORY', 'AMOUNT', 'REMARK']
+        ['BILL_ID', 'DATE', 'TYPE', 'CATEGORY', 'AMOUNT', 'REMARK', 'ACCOUNT_ID']
       );
 
       const bills: BillRecord[] = [];
@@ -229,7 +233,8 @@ export class BillService {
           type: resultSet.getString(resultSet.getColumnIndex('TYPE')) as '收入' | '支出',
           category: resultSet.getString(resultSet.getColumnIndex('CATEGORY')),
           amount: resultSet.getDouble(resultSet.getColumnIndex('AMOUNT')),
-          remark: resultSet.getString(resultSet.getColumnIndex('REMARK'))
+          remark: resultSet.getString(resultSet.getColumnIndex('REMARK')),
+          accountId: resultSet.getDouble(resultSet.getColumnIndex('ACCOUNT_ID'))
         });
       }
 

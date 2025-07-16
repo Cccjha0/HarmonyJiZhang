@@ -33,6 +33,9 @@ export class StatisticsService {
     if (options?.endDate) {
       incomePredicates.lessThanOrEqualTo('DATE', options.endDate);
     }
+    if (options?.accountId !== undefined) {
+      incomePredicates.equalTo('ACCOUNT_ID', options.accountId);
+    }
 
     // 查询支出
     const expensePredicates = new relationalStore.RdbPredicates(this.tableName);
@@ -42,6 +45,9 @@ export class StatisticsService {
     }
     if (options?.endDate) {
       expensePredicates.lessThanOrEqualTo('DATE', options.endDate);
+    }
+    if (options?.accountId !== undefined) {
+      expensePredicates.equalTo('ACCOUNT_ID', options.accountId);
     }
 
     try {
@@ -93,6 +99,11 @@ export class StatisticsService {
     if (options?.endDate) {
       predicates.lessThanOrEqualTo('DATE', options.endDate);
     }
+
+    if (options?.accountId !== undefined) {
+      predicates.equalTo('ACCOUNT_ID', options.accountId);
+    }
+
 
     try {
       const resultSet = await this.rdbStore.query(predicates, ['CATEGORY', 'AMOUNT']);
