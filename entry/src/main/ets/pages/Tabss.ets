@@ -475,7 +475,7 @@ export default struct Tabss {
           Add();
         }.tabBar({icon:$r('app.media.xxxHolic2'),text:"记一笔"})
 
-        //课程
+        //统计
         TabContent(){
           Statistics({
             currentIndex: this.currentIndex,

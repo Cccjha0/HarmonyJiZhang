@@ -3,6 +3,146 @@
     {
       "name": "page_text_font_size",
       "value": "50fp"
+    },
+    {
+      "name": "icon_size",
+      "value": "24"
+    },
+    {
+      "name": "calendar_item_size",
+      "value": "28"
+    },
+    {
+      "name": "calendar_item_size_half",
+      "value": "12"
+    },
+    {
+      "name": "width_max",
+      "value": "328"
+    },
+    {
+      "name": "width_half",
+      "value": "124"
+    },
+    {
+      "name": "width_subtitle",
+      "value": "100"
+    },
+    {
+      "name": "width_calendar_item",
+      "value": "50"
+    },
+    {
+      "name": "width_calendar",
+      "value": "350"
+    },
+    {
+      "name": "width_amount",
+      "value": "112"
+    },
+    {
+      "name": "width_divider",
+      "value": "264"
+    },
+    {
+      "name": "height_title",
+      "value": "56"
+    },
+    {
+      "name": "height_weeks",
+      "value": "50"
+    },
+    {
+      "name": "height_subtitle",
+      "value": "24"
+    },
+    {
+      "name": "height_subtitle2",
+      "value": "48"
+    },
+    {
+      "name": "height_flow_title",
+      "value": "22"
+    },
+    {
+      "name": "height_flow_detail",
+      "value": "19"
+    },
+    {
+      "name": "height_amount",
+      "value": "38"
+    },
+    {
+      "name": "height_flow_item",
+      "value": "64"
+    },
+    {
+      "name": "selectedMonth_margin_left",
+      "value": "133"
+    },
+    {
+      "name": "selectedMonth_margin_right",
+      "value": "103"
+    },
+    {
+      "name": "divider_margin_left",
+      "value": "52"
+    },
+    {
+      "name": "title_font_size",
+      "value": "20"
+    },
+    {
+      "name": "subtitle_font_size",
+      "value": "18"
+    },
+    {
+      "name": "font_size_usual",
+      "value": "14"
+    },
+    {
+      "name": "income_font_size",
+      "value": "10"
+    },
+    {
+      "name": "space_5",
+      "value": "5"
+    },
+    {
+      "name": "space_8",
+      "value": "8"
+    },
+    {
+      "name": "space_10",
+      "value": "10"
+    },
+    {
+      "name": "space_12",
+      "value": "12"
+    },
+    {
+      "name": "space_14",
+      "value": "14"
+    },
+    {
+      "name": "space_15",
+      "value": "15"
+    },
+    {
+      "name": "space_16",
+      "value": "16"
+    },
+    {
+      "name": "space_20",
+      "value": "20"
+    },
+    {
+      "name": "border_radius_12",
+      "value": "12"
+    },
+    {
+      "name": "border_radius_24",
+      "value": "24"
     }
   ]
 }

@@ -1,5 +1,6 @@
 import { billService, statisticsService } from '../common/AppServiceRegistry';
 import { BillRecord, CategoryStatItem, StatisticsOptions, StatisticsResult } from '../common/models/Bill';
+import { FlowCalendar } from '../pages/FlowCalendar'
 import { promptAction } from '@kit.ArkUI';
 
 @Entry
@@ -203,7 +204,7 @@ export default struct HomePage {
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.MARQUEE })
           .fontWeight(FontWeight.Bold)
-          .fontColor(bill.type === '支出' ? '#f53f3f' : '#07c160')
+          .fontColor(bill.type === '支出' ? '#07c160' : '#f53f3f')
       }
       .width('25%')
       .margin({right:5})
@@ -264,7 +265,7 @@ export default struct HomePage {
             Row()
               .width(`${total > 0 ? (item.total / total) * 100 : 0}%`)
               .height(10)
-              .backgroundColor(this.currentStatType === '支出' ? '#f53f3f' : '#07c160')
+              .backgroundColor(this.currentStatType === '支出' ? '#07c160' : '#f53f3f')
               .borderRadius(10)
           }
           .width('80%')
@@ -286,7 +287,7 @@ export default struct HomePage {
 
       Text(`￥${item.total.toFixed(2)}`)
         .fontSize(16)
-        .fontColor(this.currentStatType === '支出' ? '#f53f3f' : '#07c160')
+        .fontColor(this.currentStatType === '支出' ? '#07c160' : '#f53f3f')
         .width('35%')
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.MARQUEE })
@@ -488,7 +489,7 @@ export default struct HomePage {
             .fontWeight(FontWeight.Bold)
             .margin({bottom:10})
             .textAlign(TextAlign.Start)
-            .fontColor('#f53f3f')
+            .fontColor('#07c160')
             .maxLines(1)
             .textOverflow({ overflow: TextOverflow.MARQUEE })
             .width(200)
@@ -503,7 +504,7 @@ export default struct HomePage {
               .textOverflow({ overflow: TextOverflow.MARQUEE })
               .maxLines(1)
               .textAlign(TextAlign.Start)
-              .fontColor('#07c160')
+              .fontColor('#f53f3f')
           }
         }
         .width('100%')
@@ -513,39 +514,43 @@ export default struct HomePage {
       .width('100%')
       .padding(10)
 
-      // 账单列表
       Column() {
-        if (this.isLoading) {
-          LoadingProgress()
-            .width(50)
-            .height(50)
-            .color('#666')
-        } else if (this.bills.length === 0) {
-          Column() {
-            Text('暂无账单记录').fontSize(16).margin({ top: 10 }).fontColor('#666')
-          }
-          .width('100%')
-          .height('70%')
-          .justifyContent(FlexAlign.Center)
-        } else {
-          List() {
-            ForEach(this.bills, (bill: BillRecord) => {
-              ListItem() {
-                this.billItemBuilder(bill)
-              }
-            })
-          }
-          .width('100%')
-          .layoutWeight(1)
-          .padding({ left: 5, right: 5 })
-        }
+        FlowCalendar()  // 没法像 V2 那样传参
       }
-      .margin({ top: 15 })
-      .backgroundColor('#f5f5f5')
-      .width('94%')
-      .layoutWeight(1)
-      .borderRadius(30)
-      .padding({left:7,right:7,top:15})
+
+      // // 账单列表
+      // Column() {
+      //   if (this.isLoading) {
+      //     LoadingProgress()
+      //       .width(50)
+      //       .height(50)
+      //       .color('#666')
+      //   } else if (this.bills.length === 0) {
+      //     Column() {
+      //       Text('暂无账单记录').fontSize(16).margin({ top: 10 }).fontColor('#666')
+      //     }
+      //     .width('100%')
+      //     .height('70%')
+      //     .justifyContent(FlexAlign.Center)
+      //   } else {
+      //     List() {
+      //       ForEach(this.bills, (bill: BillRecord) => {
+      //         ListItem() {
+      //           this.billItemBuilder(bill)
+      //         }
+      //       })
+      //     }
+      //     .width('100%')
+      //     .layoutWeight(1)
+      //     .padding({ left: 5, right: 5 })
+      //   }
+      // }
+      // .margin({ top: 15 })
+      // .backgroundColor('#f5f5f5')
+      // .width('94%')
+      // .layoutWeight(1)
+      // .borderRadius(30)
+      // .padding({left:7,right:7,top:15})
     }
     .height('100%')
     .width('100%')

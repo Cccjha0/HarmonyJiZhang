@@ -2,39 +2,35 @@
   "string": [
     {
       "name": "module_desc",
-      "value": "module description"
+      "value": "模块描述"
     },
     {
       "name": "EntryAbility_desc",
-      "value": "description"
+      "value": "描述"
     },
     {
       "name": "EntryAbility_label",
-      "value": "label"
-    },
-    {
-      "name": "app_name",
-      "value": "记账"
+      "value": "每日收支日历图"
     },
     {
       "name": "TITLE",
-      "value": "Flow bill"
+      "value": "流水账单"
     },
     {
       "name": "CapitalFlow",
-      "value": "CapitalFlow"
+      "value": "流水"
     },
     {
       "name": "income",
-      "value": "income"
+      "value": "收入"
     },
     {
       "name": "expenses",
-      "value": "expenses"
+      "value": "支出"
     },
     {
       "name": "Not_available",
-      "value": "Not available"
+      "value": "暂无流水记录"
     }
   ]
 }

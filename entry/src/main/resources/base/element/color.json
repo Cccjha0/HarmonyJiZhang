@@ -3,6 +3,42 @@
     {
       "name": "start_window_background",
       "value": "#FFFFFF"
+    },
+    {
+      "name": "light_gray",
+      "value": "#A8A8A8"
+    },
+    {
+      "name": "light_blue",
+      "value": "#66FFFF"
+    },
+    {
+      "name": "background_color",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "supplemental_date_cell_background",
+      "value": "#220A59F7"
+    },
+    {
+      "name": "supplemental_date_font_color",
+      "value": "#22000000"
+    },
+    {
+      "name": "scoped_date_font_color",
+      "value": "#EE000000"
+    },
+    {
+      "name": "selected_date_font_color",
+      "value": "#FFFFFF"
+    },
+    {
+      "name": "scoped_date_cell_background",
+      "value": "#FFFFFFFF"
+    },
+    {
+      "name": "selected_date_cell_background",
+      "value": "#0A59F7"
     }
   ]
 }
