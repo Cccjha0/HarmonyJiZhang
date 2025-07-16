@@ -74,7 +74,7 @@ async function updateBill(id: number, bill: Partial<Bill>): Promise<boolean> {
 
 @Entry
 @Component
-struct AddAccounting{
+export default struct AddAccounting{
 
   @State amount: string = '';
   @State note: string = '';

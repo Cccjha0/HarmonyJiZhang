@@ -1,6 +1,7 @@
 import { promptAction, router } from "@kit.ArkUI";
 import Statistics from '../pages/StatisticsPage';
 import Home from '../pages/HomePage';
+import Add from '../pages/AddAccounting';
 import { BillRecord, CategoryStatItem, StatisticsOptions, StatisticsResult } from "../common/models/Bill";
 import { billService, statisticsService } from "../common/AppServiceRegistry";
 
@@ -439,20 +440,6 @@ export default struct Tabss {
   build() {
 
     Column() {
-      // 主界面中间加号按钮
-      Image($r('app.media.add'))
-        .width(60)
-        .height(60)
-        .position({
-          x: '42%',
-          y: '90%'
-        })
-        .zIndex(1)
-        .onClick((): void => {
-          router.pushUrl({
-            url: "pages/AddAccounting"
-          });
-        })
 
       Tabs() {
         //   首页
@@ -476,7 +463,18 @@ export default struct Tabss {
             yearlyStatistics: this.yearlyStatistics
           }
           );
-        }.tabBar({icon:'',text:"首页"})
+        }.tabBar({icon:$r('app.media.xxxHolic0'),text:"首页"})
+
+        //账户
+        TabContent(){
+          // Qupu();
+        }.tabBar({icon:$r('app.media.xxxHolic1'),text:"账户"})
+
+        //加号
+        TabContent(){
+          Add();
+        }.tabBar({icon:$r('app.media.xxxHolic2'),text:"记一笔"})
+
         //课程
         TabContent(){
           Statistics({
@@ -499,15 +497,12 @@ export default struct Tabss {
           }
 
           );
-        }.tabBar({icon:"",text:"统计"})
-        //曲谱
-        //TabContent(){
-        //  Qupu();
-        //}.tabBar({icon:"",text:"曲谱"})
-        //关开
-        //TabContent(){
-        //  About();
-        //}.tabBar({icon:"",text:"关于"})
+        }.tabBar({icon:$r('app.media.xxxHolic3'),text:"统计"})
+
+        //空
+        TabContent(){
+         // About();
+        }.tabBar({icon:$r('app.media.xxxHolic4'),text:"关于"})
       }.onChange((index: number): void => {
         this.currentIndex = index;
         // 当切换到统计页时，刷新统计数据
