@@ -2,6 +2,7 @@ import { promptAction, router } from "@kit.ArkUI";
 import Statistics from '../pages/StatisticsPage';
 import Home from '../pages/HomePage';
 import Add from '../pages/AddAccounting';
+import { AccountPage } from '../pages/AccountPage';
 import { BillRecord, CategoryStatItem, StatisticsOptions, StatisticsResult } from "../common/models/Bill";
 import { billService, statisticsService } from "../common/AppServiceRegistry";
 
@@ -467,7 +468,7 @@ export default struct Tabss {
 
         //账户
         TabContent(){
-          // Qupu();
+          AccountPage()
         }.tabBar({icon:$r('app.media.xxxHolic1'),text:"账户"})
 
         //加号

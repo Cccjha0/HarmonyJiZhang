@@ -4,6 +4,8 @@
     "pages/AddAccounting",
     "pages/StatisticsPage",
     "pages/Tabss",
-    "pages/HomePage"
+    "pages/HomePage",
+    "pages/PaymentDetailPage",
+    "pages/AccountPage"
   ]
 }
