@@ -6,6 +6,7 @@ export default struct WordPage{
   @StorageLink('username') username: string = '未登录用户';
   @StorageLink('avatarPath') avatarPath: string = 'app.media.default_avatar';
 
+
   build() {
     Column({ space: 20 }) {
 
@@ -23,7 +24,7 @@ export default struct WordPage{
           Text('点击修改资料')
             .fontSize(14)
             .fontColor('#888')
-        }
+        }.alignItems(HorizontalAlign.Start)
         .onClick(() => {
           // 模拟打开资料编辑页面（可自定义）
           router.pushUrl({
@@ -37,25 +38,25 @@ export default struct WordPage{
       .borderRadius(12)
 
       // 菜单项
-      this.menuItem($r('app.media.add'), '产品故事', () => {
+      this.menuItem($r('app.media.sugarlife0'), '产品故事', () => {
         router.pushUrl({
           url: "pages/WordPages/StoryPage"
         });
       })
 
-      this.menuItem($r('app.media.add'), '更新日志', () => {
+      this.menuItem($r('app.media.sugarlife1'), '更新日志', () => {
         router.pushUrl({
           url: "pages/WordPages/UpdatePage"
         });
       })
 
-      this.menuItem($r('app.media.add'), '常见问题', () => {
+      this.menuItem($r('app.media.sugarlife2'), '常见问题', () => {
         router.pushUrl({
           url: "pages/WordPages/QuestionPage"
         });
       })
 
-      this.menuItem($r('app.media.add'), '联系开发者', () => {
+      this.menuItem($r('app.media.sugarlife3'), '联系开发者', () => {
         router.pushUrl({
           url: "pages/WordPages/AssociationPage"
         });
@@ -70,26 +71,30 @@ export default struct WordPage{
   // 单项构建器
   @Builder
   menuItem(icon: Resource, title: string, onClick: () => void) {
-    Row({ space: 8 }) {
-      // 左侧图标 + 文本
+    Row({ space: 10 }) {
+      // 左侧图标 + 文本组合
       Row() {
         Image(icon)
           .width(24)
           .height(24)
-          .margin({ right: 12 })
-        Text(title)
-          .fontSize(18)
-      }
+          .borderRadius(6)
 
-      // 右侧箭头图标
-      Image($r('app.media.add'))
-        .width(16)
-        .height(16)
+        // 空白 Spacer 控制间距
+        Blank().width(12)
+
+        Text(title)
+          .fontSize(16)
+          .fontWeight(FontWeight.Medium)
+          .fontColor(Color.Black)
+      }
+      .alignItems(VerticalAlign.Center)
+
     }
     .justifyContent(FlexAlign.SpaceBetween)
-    .padding(12)
+    .padding({ left: 16, right: 16, top: 12, bottom: 12 })
     .width('100%')
     .onClick(onClick)
   }
+
 
 }

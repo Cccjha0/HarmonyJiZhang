@@ -22,59 +22,74 @@ struct UserPage {
   savePath: string = getContext().filesDir;
 
   build() {
-    Column({ space: 24}) {
-      // 头像，点击可选择新头像
-      Image(this.avatarPath.startsWith('app.media') ? $r(this.avatarPath) : this.avatarPath)
-        .width(120)
-        .height(120)
-        .borderRadius(60)
-        .backgroundColor('#eee')
-        .onClick(() => {
-          this.getPictureFromAlbum();
-        })
+    Column() {
+      // 顶部栏
+      Row() {
+        Image($r('app.media.back')).width(35).height(35).margin({ left: 15, right: 10 })
+          .onClick(() => {
+            router.back();
+          })
+        Text('个人信息').fontSize(20).fontWeight(600)
+      }
+      .justifyContent(FlexAlign.Start)
+      .width('100%')
+      .margin({ bottom: 20, top: 15, left: 10 })
 
-      // 用户名输入框
-      TextInput({
-        text: this.username,
-        placeholder: '请输入用户名',
-      })
-        .width('80%')
-        .fontSize(20)
-        .padding(12)
-        .border({ width: 1, color: '#ccc' })
-        .borderRadius(10)
-        .onChange((value: string) => {
-          this.text_username = value
-          console.log("当前输入值：", value)
-        })
+      // 表单内容
+      Column({ space: 24 }) {
+        // 头像
+        Image(this.avatarPath.startsWith('app.media') ? $r(this.avatarPath) : this.avatarPath)
+          .width(120)
+          .height(120)
+          .borderRadius(60)
+          .backgroundColor('#eee')
+          .onClick(() => {
+            this.getPictureFromAlbum();
+          })
 
-
-      // 返回按钮
-      Button('保存并返回')
-        .width('80%')
-        .height(44)
-        .fontSize(18)
-        .borderRadius(10)
-        .backgroundColor('#409EFF')
-        .fontColor('#fff')
-        .onClick(() => {
-          if (!this.text_username.trim()) {
-            this.message = '用户名不能为空';
-            return;
-          }
-          this.username = this.text_username.trim();
-          AppStorage.Set('username', this.text_username);
-          // avatarPath 已经在 getImage 中更新和存储了
-          this.message = '';
-          router.back();
+        // 用户名输入框
+        TextInput({
+          text: this.username,
+          placeholder: '请输入用户名',
         })
+          .width('80%')
+          .fontSize(20)
+          .padding(12)
+          .border({ width: 1, color: '#ccc' })
+          .borderRadius(10)
+          .onChange((value: string) => {
+            this.text_username = value;
+            console.log("当前输入值：", value)
+          })
+
+        // 保存按钮
+        Button('保存并返回')
+          .width('80%')
+          .height(44)
+          .fontSize(18)
+          .borderRadius(10)
+          .backgroundColor(Color.Black)
+          .fontColor('#fff')
+          .onClick(() => {
+            if (!this.text_username.trim()) {
+              this.message = '用户名不能为空';
+              return;
+            }
+            this.username = this.text_username.trim();
+            AppStorage.Set('username', this.text_username);
+            this.message = '';
+            router.back();
+          })
+      }
+      .alignItems(HorizontalAlign.Center)
+      .padding(24)
+      .width('100%')
+      .backgroundColor('#fff')
     }
-    .alignItems(HorizontalAlign.Center)
-    .padding(24)
     .width('100%')
     .height('100%')
-    .backgroundColor('#fff')
   }
+
 
   private async getPictureFromAlbum() {
     this.isCrop = false;
