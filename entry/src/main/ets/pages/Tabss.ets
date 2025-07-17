@@ -501,14 +501,14 @@ export default struct Tabss {
           );
         }.tabBar({icon:$r('app.media.xxxHolic3'),text:"统计"})
 
-        //空
+
         TabContent(){
          WordPage();
         }.tabBar({icon:$r('app.media.xxxHolic4'),text:"关于"})
       }.onChange((index: number): void => {
         this.currentIndex = index;
         // 当切换到统计页时，刷新统计数据
-        if (index === 1) {
+        if (index === 3) {
           // 设置初始标签为月度统计
           this.statsTabIndex = 0;
 
