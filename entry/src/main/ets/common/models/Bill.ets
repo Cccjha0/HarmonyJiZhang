@@ -12,6 +12,7 @@ export interface BillRecord extends Bill {
 }
 
 export interface QueryBillOptions {
+  accountId?: number
   type?: '收入' | '支出';
   startDate?: string;
   endDate?: string;

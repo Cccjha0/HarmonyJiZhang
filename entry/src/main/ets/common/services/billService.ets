@@ -185,7 +185,7 @@ export class BillService {
 
   /**
    * 根据查询条件筛选账单
-   * @param options 查询参数（类型、起止日期、排序）
+   * @param options 查询参数（账户、类型、起止日期、排序）
    */
   async getBillsByOptions(options: QueryBillOptions): Promise<BillRecord[]> {
     if (!this.rdbStore) {
@@ -196,6 +196,9 @@ export class BillService {
     const predicates = new relationalStore.RdbPredicates(this.tableName);
 
     // 查询条件
+    if (options?.accountId) {
+      predicates.equalTo('ACCOUNT_ID', options.accountId);
+    }
     if (options?.type) {
       predicates.equalTo('TYPE', options.type);
     }
