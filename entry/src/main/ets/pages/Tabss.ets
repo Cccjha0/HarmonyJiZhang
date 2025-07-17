@@ -28,6 +28,7 @@ export default struct Tabss {
   @State statsUpdateTrigger: number = 0;
   @State yearlyStatistics: StatisticsResult = { totalIncome: 0, totalExpense: 0 };
   @State hasInit: boolean = false;
+  @State calendarRefreshKey: number = 0;
 
   aboutToAppear() {
     // 初始化年份列表（近5年）
@@ -462,7 +463,8 @@ export default struct Tabss {
             categoryStats: this.categoryStats,
             yearlyStats: this.yearlyStats,
             statsUpdateTrigger: this.statsUpdateTrigger,
-            yearlyStatistics: this.yearlyStatistics
+            yearlyStatistics: this.yearlyStatistics,
+            calendarRefreshKey: this.calendarRefreshKey
           }
           );
         }.tabBar({icon:$r('app.media.xxxHolic0'),text:"首页"})

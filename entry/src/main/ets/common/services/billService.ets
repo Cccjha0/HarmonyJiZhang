@@ -250,4 +250,24 @@ export class BillService {
     }
   }
 
+  /**
+   * 查询指定年月的账单
+   * @param year 年份（如 2025）
+   * @param month 月份（1~12）
+   */
+  async getBillsByMonth(year: number, month: number): Promise<BillRecord[]> {
+    const startDate = `${year}-${String(month).padStart(2, '0')}-01`
+    const daysInMonth = new Date(year, month, 0).getDate()
+    const endDate = `${year}-${String(month).padStart(2, '0')}-${String(daysInMonth).padStart(2, '0')}`
+
+    const options: QueryBillOptions = {
+      startDate,
+      endDate,
+      sortBy: 'date',
+      sortOrder: 'asc'
+    }
+
+    return this.getBillsByOptions(options)
+  }
+
 }

@@ -13,36 +13,59 @@
  * limitations under the License.
  */
 
-import { BillCell, BillDetail, SOURCE_DATA, SourceData, WEEKS } from '../model/SourceDataModel';
+import { BillCell, BillDetail, WEEKS } from '../model/SourceDataModel';
 import { CommonConstants } from '../constants/CommonConstants';
+import { BillRecord, QueryBillOptions } from '../common/models/Bill';
+import { statisticsService, billService, accountService } from '../common/AppServiceRegistry';
 
 const FULL_YEAR = 12;
 
 @Entry
 @Component
 struct FlowCalendar {
+  @Prop calendarRefreshKey: number;
   @State topRectHeight: number = AppStorage.get('topRectHeight') as number;
-  @State year: number = 2025;
-  @State month: number = 5;
+  @Prop year: number;
+  @Prop month: number;
   @State selectedScopedMonth: string = '';
   private weeks: string[] = WEEKS;
   private today: Date = new Date();
-  @State sourceData: SourceData[] = [];
+  @State sourceData: BillRecord[] = [];
   @State flowCells: BillCell[] = [];
   @State private selectedDayFlow: BillCell = new BillCell(1, false, 0, 0, []);
-  @State private selectedDate: Date = this.today;
+  @Prop selectedDate: Date = this.today;
+  private prevCalendarRefreshKey: number = -1;
 
+  async getSourceData(): Promise<void> {
+    this.sourceData = await billService.getBillsByMonth(this.year, this.month)
+  }
 
-  aboutToAppear(): void {
-    this.sourceData = SOURCE_DATA
+  async aboutToAppear(): Promise<void> {
+    await this.getSourceData()
     this.today = new Date()
-    this.year = this.today.getFullYear()
-    this.month = this.today.getMonth() + 1
     this.calcFlows(this.year, this.month, this.today.getDate())
   }
 
+  aboutToRender() {
+    if (this.prevCalendarRefreshKey !== this.calendarRefreshKey) {
+      this.prevCalendarRefreshKey = this.calendarRefreshKey;
+
+      // 变化后执行刷新逻辑
+      this.calcFlows(this.year, this.month, this.selectedDate.getDate());
+    }
+  }
+
+  private parseDate(dateStr: string): Date {
+    const parts = dateStr.split('-').map(Number)
+    const year = parts[0]
+    const month = parts[1]
+    const day = parts[2]
+    return new Date(year, month - 1, day)
+  }
+
   // 日历图数据单元的初始化
-  calcFlows(y: number, m: number, day: number) {
+  async calcFlows(y: number, m: number, day: number) {
+    await this.getSourceData();
     this.selectedScopedMonth = this.year.toString() + '年' + this.month.toString() + '月'
     let thisFlows: BillCell[] = []
     const startDay = new Date(y, m - 1, 1)
@@ -61,7 +84,7 @@ struct FlowCalendar {
     }
     // 往本月的cell中填充数据
     for (let i = 0; i < this.sourceData.length; i++) {
-      let day = this.sourceData[i].payDate.getDate()
+      let day = this.parseDate(this.sourceData[i].date).getDate();
       thisFlows[day + startMissingDays - 1].addDetails(this.sourceData[i])
     }
     // 如果选中月非当前月，则需补充下个月的前几天做填充
@@ -88,34 +111,34 @@ struct FlowCalendar {
 
   build() {
     Column() {
-      // Row() {
-      //   Text(this.selectedScopedMonth)
-      //     .size({ width: $r('app.float.width_subtitle'), height: $r('app.float.height_subtitle') })
-      //     .font({ size: $r('app.float.subtitle_font_size'), weight: CommonConstants.FONT_WEIGHT })
-      //   Image($r('app.media.arrow_bottom'))
-      //     .size({ width: $r('app.float.height_subtitle'), height: $r('app.float.height_subtitle') })
-      // }
-      // .size({ width: $r('app.float.width_half'), height: $r('app.float.height_subtitle') })
-      // .margin({ left: $r('app.float.selectedMonth_margin_left'), right: $r('app.float.selectedMonth_margin_right') })
-      // .onClick(() => {
-      //   DatePickerDialog.show({
-      //     start: new Date('2000-1-1'),
-      //     end: this.today,
-      //     selected: this.selectedDate,
-      //     lunar: false,
-      //     disappearTextStyle: { color: Color.Gray, font: { size: '14fp', weight: FontWeight.Normal } },
-      //     textStyle: { color: Color.Black, font: { size: '18fp', weight: FontWeight.Regular } },
-      //     selectedTextStyle: { color: Color.Black, font: { size: '22fp', weight: FontWeight.Bold } },
-      //     acceptButtonStyle: { fontColor: $r('app.color.selected_date_cell_background') },
-      //     cancelButtonStyle: { fontColor: Color.Gray },
-      //     onDateAccept: (value: Date) => {
-      //       this.selectedDate = value
-      //       this.year = value.getFullYear()
-      //       this.month = value.getMonth() + 1
-      //       this.calcFlows(this.year, this.month, value.getDate())
-      //     }
-      //   })
-      // })
+      Row() {
+        Text(this.selectedScopedMonth)
+          .size({ width: $r('app.float.width_subtitle'), height: $r('app.float.height_subtitle') })
+          .font({ size: $r('app.float.subtitle_font_size'), weight: CommonConstants.FONT_WEIGHT })
+        Image($r('app.media.arrow_bottom'))
+          .size({ width: $r('app.float.height_subtitle'), height: $r('app.float.height_subtitle') })
+      }
+      .size({ width: $r('app.float.width_half'), height: $r('app.float.height_subtitle') })
+      .margin({ left: $r('app.float.selectedMonth_margin_left'), right: $r('app.float.selectedMonth_margin_right') })
+      .onClick(() => {
+        DatePickerDialog.show({
+          start: new Date('2000-1-1'),
+          end: this.today,
+          selected: this.selectedDate,
+          lunar: false,
+          disappearTextStyle: { color: Color.Gray, font: { size: '14fp', weight: FontWeight.Normal } },
+          textStyle: { color: Color.Black, font: { size: '18fp', weight: FontWeight.Regular } },
+          selectedTextStyle: { color: Color.Black, font: { size: '22fp', weight: FontWeight.Bold } },
+          acceptButtonStyle: { fontColor: $r('app.color.selected_date_cell_background') },
+          cancelButtonStyle: { fontColor: Color.Gray },
+          onDateAccept: (value: Date) => {
+            this.selectedDate = value
+            this.year = value.getFullYear()
+            this.month = value.getMonth() + 1
+            this.calcFlows(this.year, this.month, value.getDate())
+          }
+        })
+      })
 
       Row() {
         ForEach(this.weeks, (item: string) => {

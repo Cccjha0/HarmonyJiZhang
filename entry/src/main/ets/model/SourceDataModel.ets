@@ -13,26 +13,66 @@
  * limitations under the License.
  */
 
-export class SourceData {
-  isIncome: boolean = false
-  title: string = ''
-  amount: number = 0.0
-  paymentMethod: string = '现金'
-  account: string = ''
-  payDate: Date = new Date()
-  icon: Resource = $r('app.media.heart')
+import { BillRecord } from '../common/models/Bill'
+import { AccountRecord } from '../common/models/Account'
+import { billService, accountService } from '../common/AppServiceRegistry';
 
-  constructor(isIncome: boolean, title: string, amount: number, paymentMethod: string, account: string, payDate: Date,
-    icon: Resource) {
-    this.isIncome = isIncome
-    this.title = title
-    this.amount = amount
-    this.paymentMethod = paymentMethod
-    this.account = account
-    this.payDate = payDate
-    this.icon = icon
-  }
-}
+// Bill {
+//   id:
+//   date: string;
+//   type: '收入' | '支出';
+//   category: string;
+//   amount: number;
+//   remark?: string;
+//   accountId: number;
+// }
+
+// export class SourceData {
+//   isIncome: boolean = false
+//   title: string = ''
+//   amount: number = 0.0
+//   paymentMethod: string = '现金'
+//   account: string = ''
+//   payDate: Date = new Date()
+//   icon: Resource = $r('app.media.heart')
+//
+//   constructor(isIncome: boolean, title: string, amount: number, paymentMethod: string, account: string, payDate: Date,
+//     icon: Resource) {
+//     this.isIncome = isIncome
+//     this.title = title
+//     this.amount = amount
+//     this.paymentMethod = paymentMethod
+//     this.account = account
+//     this.payDate = payDate
+//     this.icon = icon
+//   }
+// }
+
+const CATEGORY_ICON_MAP: Record<string, Resource> = {
+  '餐饮': $r('app.media.cy'),
+  '医疗': $r('app.media.yl'),
+  '交通': $r('app.media.jt'),
+  '住房': $r('app.media.zf'),
+  '零食烟酒': $r('app.media.lsyj'),
+  '学习': $r('app.media.xx'),
+  '通讯': $r('app.media.tx'),
+  '社交': $r('app.media.sj'),
+  '投资': $r('app.media.tz'),
+  '购物': $r('app.media.gw'),
+  '娱乐': $r('app.media.yule'),
+  '外借': $r('app.media.zz'),
+  '其他': $r('app.media.other'),
+  '工资': $r('app.media.gz'),
+  '奖金': $r('app.media.jj'),
+  '租金': $r('app.media.zj'),
+  '报销': $r('app.media.bx'),
+  '退款': $r('app.media.tk'),
+  '红包': $r('app.media.hb'),
+  '利息': $r('app.media.lx'),
+  '交易': $r('app.media.jy'),
+  '奖学金': $r('app.media.jxj'),
+  '分红': $r('app.media.fh'),
+};
 
 export class BillDetail {
   isIncome: boolean = false
@@ -68,16 +108,17 @@ export class BillCell {
     this.flowDetails = flowDetails
   }
 
-  addDetails(sourceData: SourceData) {
-    if (sourceData.isIncome) {
-      this.income += sourceData.amount
+  addDetails(billRecord: BillRecord) {
+    let iconRes: Resource = CATEGORY_ICON_MAP[billRecord.category] ?? $r('app.media.default_icon');
+
+    if (billRecord.type == '收入') {
+      this.income += billRecord.amount
     } else {
-      this.expense += sourceData.amount
+      this.expense += billRecord.amount
     }
-    let detail = sourceData.paymentMethod + ' ' + sourceData.account + ' '
-      + sourceData.payDate.getHours() + ':' + sourceData.payDate.getMinutes()
+    let detail = accountService.getAccountById(billRecord.accountId) + ' ' + billRecord.date
     this.flowDetails.push(
-      new BillDetail(sourceData.isIncome, sourceData.title, sourceData.amount, detail, sourceData.icon))
+      new BillDetail(billRecord.type == '收入', billRecord.category, billRecord.amount, detail, iconRes))
   }
 
   changeCellStyle(cellColor: Resource, cellFontColor: Resource) {
@@ -87,13 +128,13 @@ export class BillCell {
 }
 
 // 原始数据
-export const SOURCE_DATA: Array<SourceData> = [
-  new SourceData(false, '慈善捐助', 10.0, '现金', '159****1700', new Date(2025, 5, 12, 9, 24), $r('app.media.heart')),
-  new SourceData(false, '晚餐', 24.3, '现金', '159****1700', new Date(2025, 5, 12, 18, 23), $r('app.media.knives')),
-  new SourceData(true, '工资', 3000.0, '现金', '159****1700', new Date(2025, 5, 15, 15, 39), $r('app.media.heart')),
-  new SourceData(false, '午餐', 56.8, '现金', '159****1700', new Date(2025, 5, 15, 11, 39), $r('app.media.knives')),
-  new SourceData(true, '退款', 123.0, '现金', '159****1700', new Date(2025, 5, 25, 10, 35), $r('app.media.heart')),
-  new SourceData(false, '晚餐', 56.8, '现金', '159****1700', new Date(2025, 5, 25, 17, 59), $r('app.media.knives'))
-]
+// export const SOURCE_DATA: Array<SourceData> = [
+//   new SourceData(false, '慈善捐助', 10.0, '现金', '159****1700', new Date(2025, 5, 12, 9, 24), $r('app.media.heart')),
+//   new SourceData(false, '晚餐', 24.3, '现金', '159****1700', new Date(2025, 5, 12, 18, 23), $r('app.media.knives')),
+//   new SourceData(true, '工资', 3000.0, '现金', '159****1700', new Date(2025, 5, 15, 15, 39), $r('app.media.heart')),
+//   new SourceData(false, '午餐', 56.8, '现金', '159****1700', new Date(2025, 5, 15, 11, 39), $r('app.media.knives')),
+//   new SourceData(true, '退款', 123.0, '现金', '159****1700', new Date(2025, 5, 25, 10, 35), $r('app.media.heart')),
+//   new SourceData(false, '晚餐', 56.8, '现金', '159****1700', new Date(2025, 5, 25, 17, 59), $r('app.media.knives'))
+// ]
 
 export const WEEKS: string[] = ['日', '一', '二', '三', '四', '五', '六']
