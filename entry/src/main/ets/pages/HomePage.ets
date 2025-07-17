@@ -115,13 +115,18 @@ export default struct HomePage {
     this.selectedDayFlow.changeCellStyle($r('app.color.selected_date_cell_background'),
       $r('app.color.selected_date_font_color'))
     this.selectedDate = new Date(y, m - 1, day)
+    console.info(`生成 ${this.flowCells.length} 个 flowCell 单元格`)
   }
 
   async aboutToAppear() {
     // 初始化年份列表（近5年）
+    const currentMonth = new Date().getMonth() + 1;
     const currentYear = new Date().getFullYear();
     this.yearList = Array.from<number, number>({length: 5}, (_, i) => currentYear - i);
     this.selectedYear = currentYear;
+
+    this.year = currentYear;
+    this.month = currentMonth;
 
     await this.getSourceData()
     this.today = new Date()

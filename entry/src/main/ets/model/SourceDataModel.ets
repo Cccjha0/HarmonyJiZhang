@@ -108,7 +108,7 @@ export class BillCell {
     this.flowDetails = flowDetails
   }
 
-  addDetails(billRecord: BillRecord) {
+  async addDetails(billRecord: BillRecord) {
     let iconRes: Resource = CATEGORY_ICON_MAP[billRecord.category] ?? $r('app.media.default_icon');
 
     if (billRecord.type == '收入') {
@@ -116,7 +116,8 @@ export class BillCell {
     } else {
       this.expense += billRecord.amount
     }
-    let detail = accountService.getAccountById(billRecord.accountId) + ' ' + billRecord.date
+    const record = await accountService.getAccountById(billRecord.accountId);
+    let detail = record.name + ' ' + billRecord.date
     this.flowDetails.push(
       new BillDetail(billRecord.type == '收入', billRecord.category, billRecord.amount, detail, iconRes))
   }
