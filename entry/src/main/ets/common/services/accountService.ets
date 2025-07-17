@@ -50,6 +50,30 @@ export class AccountService {
   }
 
   /**
+   * 通过账户名称name获取账户
+   */
+  async getAccountByName(name: string): Promise<AccountRecord> {
+    const predicates = new relationalStore.RdbPredicates(this.accountTable);
+    predicates.equalTo('NAME', name);
+
+    try {
+      const resultSet = await this.rdbStore.query(predicates, ['ACCOUNT_ID', 'NAME', 'TYPE']);
+      const account: AccountRecord = {
+        id: resultSet.getDouble(resultSet.getColumnIndex('ACCOUNT_ID')),
+        name: resultSet.getString(resultSet.getColumnIndex('NAME')),
+        type: resultSet.getString(resultSet.getColumnIndex('TYPE'))
+      };
+
+      resultSet.close();
+      return account;
+    } catch (err) {
+      const error = err as BusinessError;
+      console.error(`获取账户失败: ${error.message}`);
+      return {} as AccountRecord;
+    }
+  }
+
+  /**
    * 通过AccountId获取账户
    */
   async getAccountById(accountId: number): Promise<AccountRecord> {
