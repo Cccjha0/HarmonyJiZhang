@@ -58,20 +58,27 @@ export class AccountService {
 
     try {
       const resultSet = await this.rdbStore.query(predicates, ['ACCOUNT_ID', 'NAME', 'TYPE']);
-      const account: AccountRecord = {
-        id: resultSet.getDouble(resultSet.getColumnIndex('ACCOUNT_ID')),
-        name: resultSet.getString(resultSet.getColumnIndex('NAME')),
-        type: resultSet.getString(resultSet.getColumnIndex('TYPE'))
-      };
 
-      resultSet.close();
-      return account;
+      if (resultSet.goToFirstRow()) {
+        const account: AccountRecord = {
+          id: resultSet.getDouble(resultSet.getColumnIndex('ACCOUNT_ID')),
+          name: resultSet.getString(resultSet.getColumnIndex('NAME')),
+          type: resultSet.getString(resultSet.getColumnIndex('TYPE'))
+        };
+        resultSet.close();
+        return account;
+      } else {
+        resultSet.close();
+        console.warn(`未找到名称为 ${name} 的账户`);
+        return {} as AccountRecord; // 或者你可以返回 null 或 undefined 更清晰
+      }
     } catch (err) {
       const error = err as BusinessError;
       console.error(`获取账户失败: ${error.message}`);
       return {} as AccountRecord;
     }
   }
+
 
   /**
    * 通过AccountId获取账户
