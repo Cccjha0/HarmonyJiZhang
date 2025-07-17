@@ -1,5 +1,5 @@
 import { BillRecord } from '../common/models/Bill'
-import { billService } from '../common/AppServiceRegistry'
+import { billService,accountService } from '../common/AppServiceRegistry'
 import router from '@ohos.router'
 
 interface RouteParams {
@@ -35,11 +35,27 @@ export struct PaymentDetailPage {
     try {
       // 获取所有账单
       const allBills = await billService.getAllBills()
+
+      // 获取对应支付方式的 accountId
+      let accountId = -1
+      try {
+        const account = await accountService.getAccountByName(this.paymentType)
+        console.debug("get:" + account.id)
+        accountId = account.id
+      } catch (err) {
+        console.error(`无法获取账户 ${this.paymentType}:`, err.message)
+      }
+
+      if (accountId === -1) {
+        this.bills = []
+        this.totalIncome = 0
+        this.totalExpense = 0
+        return
+      }
       
       // 根据accountId过滤特定支付方式的账单
       this.bills = allBills.filter(bill => {
-        // TODO: 需要根据实际的accountId和支付方式的对应关系进行过滤
-        return true
+        return bill.accountId === accountId
       })
 
       // 计算总收入和支出
@@ -104,6 +120,7 @@ export struct PaymentDetailPage {
       }
       .width('100%')
       .padding({ left: 16, right: 16, top: 8, bottom: 8 })
+      .backgroundColor("#FFFFFF")
 
       // 收支统计
       Row() {
