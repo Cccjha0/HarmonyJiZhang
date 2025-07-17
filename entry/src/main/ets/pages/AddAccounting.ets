@@ -245,8 +245,8 @@ export default struct AddAccounting{
       type: '支出',
       category: category,
       amount: parseFloat(this.amount),
-      remark: this.note,
-      accountId: this.currentAccountId
+      accountId: this.currentAccountId,
+      remark: this.note
     };
     
     return await insertBill(bill);
@@ -363,20 +363,45 @@ export default struct AddAccounting{
               .width('93%')
 
               // 日期、备注信息
-              Row(){
+              Row() {
+                // 日期选择器（左侧）
                 CalendarPicker({ hintRadius: 10, selected: this.selectedDate })
-                  .width('30%')
-                  .width('25%')
-                  .edgeAlign(CalendarAlign.CENTER,{dx:1,dy:1})
-                  .textStyle({ color:Color.Black,font:{ size:15,weight:FontWeight.Normal } })
+                  .width('45%') // 合理宽度
+                  .edgeAlign(CalendarAlign.CENTER, { dx: 1, dy: 1 })
+                  .textStyle({ color: Color.Black, font: { size: 15, weight: FontWeight.Normal } })
                   .onChange((date: Date) => {
-                    this.selectedDate = date;
+                    this.selectedDate = date
                   })
 
+                // 间距
+                Blank(12)
+
+                // 账户选择器（右侧）
+                Select([
+                  { value: '现金' },
+                  { value: '银行卡' },
+                  { value: '信用卡' },
+                  { value: '支付宝' },
+                  { value: '微信' }
+                ])
+                  .value('现金')
+                  .width('45%') // 固定宽度
+                  .selected(0)
+                  .font({ size: 13, weight: 500 })
+                  .fontColor('#182431')
+                  .selectedOptionFont({ size: 13, weight: 400 })
+                  .optionFont({ size: 13, weight: 400 })
+                  .onSelect((index: number) => {
+                    this.currentAccountId = index
+                    console.info('Select:' + index)
+                  })
               }
               .width('90%')
               .height('8%')
-              .borderColor('#bfbfbf')
+              .padding({ left: 12, right: 12 }) // 添加内边距更精致
+              .border({ width: 1, color: '#bfbfbf' })
+              .alignItems(VerticalAlign.Center)
+
 
               Row(){
                 TextInput({placeholder:'请输入备注', text: this.note})
@@ -498,6 +523,29 @@ export default struct AddAccounting{
                     this.selectedDate = date;
                   })
 
+                // 间距
+                Blank(12)
+
+                // 账户选择器（右侧）
+                Select([
+                  { value: '现金' },
+                  { value: '银行卡' },
+                  { value: '信用卡' },
+                  { value: '支付宝' },
+                  { value: '微信' }
+                ])
+                  .value('现金')
+                  .width('45%') // 固定宽度
+                  .selected(0)
+                  .font({ size: 13, weight: 500 })
+                  .fontColor('#182431')
+                  .selectedOptionFont({ size: 13, weight: 400 })
+                  .optionFont({ size: 13, weight: 400 })
+                  .onSelect((index: number) => {
+                    this.currentAccountId = index
+                    console.info('Select:' + index)
+                  })
+
               }
               .width('90%')
               .height('8%')
@@ -513,6 +561,7 @@ export default struct AddAccounting{
                   .onChange((value: string) => {
                     this.note = value;
                   })
+
               }
               .width('90%')
               .height('14%')
