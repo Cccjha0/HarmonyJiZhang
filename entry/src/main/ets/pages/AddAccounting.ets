@@ -373,6 +373,12 @@ export default struct AddAccounting{
                     this.selectedDate = date;
                   })
 
+              }
+              .width('90%')
+              .height('8%')
+              .borderColor('#bfbfbf')
+
+              Row(){
                 TextInput({placeholder:'请输入备注', text: this.note})
                   .backgroundColor('#f0f0f0')
                   .width('50%')
@@ -383,13 +389,14 @@ export default struct AddAccounting{
                   })
               }
               .width('90%')
-              .height('12%')
-              .margin({top:10})
-              .borderWidth({top:1,bottom:1})
+              .height('14%')
+              .borderWidth({bottom:1})
               .borderColor('#bfbfbf')
 
+
+
             }.width('88%')
-            .height('80%')
+            .height('90%')
             .backgroundColor('#f0f0f0')
             .borderRadius(30)
             .padding(10)
@@ -491,6 +498,13 @@ export default struct AddAccounting{
                     this.selectedDate = date;
                   })
 
+              }
+              .width('90%')
+              .height('8%')
+              .margin({top:10})
+              .borderColor('#bfbfbf')
+
+              Row(){
                 TextInput({placeholder:'请输入备注', text: this.note})
                   .backgroundColor('#f0f0f0')
                   .width('50%')
@@ -501,13 +515,12 @@ export default struct AddAccounting{
                   })
               }
               .width('90%')
-              .height('12%')
-              .margin({top:10})
-              .borderWidth({top:1,bottom:1})
+              .height('14%')
+              .borderWidth({bottom:1})
               .borderColor('#bfbfbf')
 
             }.width('88%')
-            .height('80%')
+            .height('90%')
             .backgroundColor('#f0f0f0')
             .borderRadius(30)
             .padding(10)
