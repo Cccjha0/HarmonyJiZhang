@@ -2,6 +2,7 @@ import { billService, statisticsService } from '../common/AppServiceRegistry';
 import { BillRecord, CategoryStatItem, StatisticsOptions, StatisticsResult } from '../common/models/Bill';
 import { promptAction } from '@kit.ArkUI';
 import { McPieChart, Options } from '@mcui/mccharts'
+import { circle } from '@mcui/mccharts/src/main/ets/mcCore/cRender/config/graphs';
 
 interface ChartItem {
   name: string;
@@ -38,60 +39,7 @@ export default struct StatisticsPage{
 
   @State chartData: ChartItem[] = [];
 
-  @State defOptions: Options = new Options({
-    //调色盘颜色列表
-    color: ['#caceb5', '#bbaab8', '#6f9f9c', '#e2d8af',
-      '#929b80', '#95bccc', '#afac9b', '#697a98',
-      '#676966', '#e1a36f', '#88845f', '#84a59d',
-      '#ff059cca'],
-    //设置图例的相关样式与功能
-    legend: {
-      top: '1%', //图例距离顶部侧位置
-      itemWidth: 10, //图形的宽度
-      itemHeight: 10, //图形的高度
-      textStyle: {
-        //文本样式配置
-        color: '#ff029cdd', //字体颜色
-        fontSize: 30, //字体大小
-        fontWeight: '800' //字体粗细
-      }
-    },
-    title: {
-      show: true,
-      text: this.currentStatType+'数据占比', // 主标题文本
-      subtext: '', // 副标题文本
-      top: '30%',
-      fontSize: 20, //字体大小
-    },
-    series: [
-      {
-        radius: ['50%', '35%'], // 饼图外半径、内半径
-        center: ['50%', '75%'], // 饼图中心位置
-        data: this.chartData,
-        labelLine: {
-          //文本连接线样式配置
-          length: 25, //连接线1的长度
-          length2: 30, //连接线2的长度
-          lineStyle: {
-            //提示线样式
-            width: 1, //线宽度
-            color: '#effffb' //线颜色
-          }
-        },
-        label: {
-          //系列文本标签样式配置
-          show: true, //是否显示文本标签
-          fontWeight: '800', //字体粗细
-          fontFamily: 'sans-serif',
-          color: '#ffffffff', //字体颜色
-          position: 'outside', //文本显示位置
-          fontSize: 30, //字体大小
-          distanceToLabelLine: 6 //字体与饼状间距
-        },
-      }
-    ],
-
-  })
+  @State defOptions: Options = new Options({})
 
   aboutToAppear() {
     // 初始化年份列表（近5年）
@@ -198,15 +146,17 @@ export default struct StatisticsPage{
 
     this.defOptions = new Options({
       //调色盘颜色列表
-      color: ['#caceb5', '#bbaab8', '#e1a36f', '#e2d8af',
-        '#929b80', '#95bccc', '#afac9b', '#697a98',
-        '#676966', '#6f9f9c', '#88845f', '#84a59d',
-        '#ff059cca'],
+      color: ['#efe45c', '#797ef6', '#4adede', '#feac00',
+        '#27ae61', '#e84c3d', '#91ff00', '#3598db',
+        '#acffd4', '#ff8c29', '#ffc8d3', '#84a59d',
+        '#63c834','#d03b3b','#cfcfcf'],
       //设置图例的相关样式与功能
       legend: {
         top: '3%', //图例距离顶部侧位置
-        itemWidth: 10, //图形的宽度
-        itemHeight: 10, //图形的高度
+        icon: 'circle',
+        itemTextGap: 3,
+        itemWidth: 8, //图形的宽度
+        itemHeight: 8, //图形的高度
         textStyle: {
           //文本样式配置
           color: '#233c4b', //字体颜色
@@ -216,10 +166,19 @@ export default struct StatisticsPage{
       },
       title: {
         show: true,
-        text: this.currentStatType+'数据占比', // 主标题文本
+        text: this.currentStatType+'金额占比', // 主标题文本
         subtext: '', // 副标题文本
-        top: '30%',
-        fontSize: 20, //字体大小
+        top: '35%',
+        fontSize: 28, //字体大小
+      },
+      tooltip: {
+        show: true,
+        borderColor: '#f72659f5',
+        borderWidth: 1,
+        backgroundColor: '#fff',
+        textStyle: { // 文本样式配置
+          color: '#000'
+        }
       },
       series: [
         {
@@ -230,21 +189,16 @@ export default struct StatisticsPage{
             //文本连接线样式配置
             length: 25, //连接线1的长度
             length2: 30, //连接线2的长度
-            lineStyle: {
-              //提示线样式
-              width: 1, //线宽度
-              color: '#effffb' //线颜色
-            }
           },
           label: {
             //系列文本标签样式配置
-            show: true, //是否显示文本标签
+            show: false, //是否显示文本标签
             fontWeight: '800', //字体粗细
             fontFamily: 'sans-serif',
             color: '#ffffffff', //字体颜色
             position: 'outside', //文本显示位置
             fontSize: 30, //字体大小
-            distanceToLabelLine: 6 //字体与饼状间距
+            distanceToLabelLine: 5 //字体与饼状间距
           },
         }
       ],
