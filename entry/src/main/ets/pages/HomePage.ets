@@ -47,6 +47,17 @@ export default struct HomePage {
   @State private selectedDayFlow: BillCell = new BillCell(1, false, 0, 0, []);
   private prevCalendarRefreshKey: number = -1;
 
+  async aboutToAppear() {
+    // 初始化年份列表（近5年）
+    const currentYear = new Date().getFullYear();
+    this.yearList = Array.from<number, number>({ length: 5 }, (_, i) => currentYear - i);
+    this.selectedYear = currentYear;
+
+    this.today = new Date();
+
+    // 使用统一加载逻辑，避免漏数据
+    await this.updateSelectedMonth(this.today);
+  }
 
 
   async getSourceData(): Promise<void> {
@@ -118,20 +129,7 @@ export default struct HomePage {
     console.info(`生成 ${this.flowCells.length} 个 flowCell 单元格`)
   }
 
-  async aboutToAppear() {
-    // 初始化年份列表（近5年）
-    const currentMonth = new Date().getMonth() + 1;
-    const currentYear = new Date().getFullYear();
-    this.yearList = Array.from<number, number>({length: 5}, (_, i) => currentYear - i);
-    this.selectedYear = currentYear;
 
-    this.year = currentYear;
-    this.month = currentMonth;
-
-    await this.getSourceData()
-    this.today = new Date()
-    this.calcFlows(this.year, this.month, this.today.getDate())
-  }
 
   onPageShow() {
     // 获取当前日期并更新状态
@@ -155,12 +153,19 @@ export default struct HomePage {
     this.loadMonthlyStatistics(currentYear, currentMonth);
   }
 
-  // 监听 currentIndex 变化
-  currentIndexDidChange(newIndex: number) {
-    if (newIndex === 0) {
-      this.calendarRefreshKey++; // 每次回到首页就更新 key
-    }
+  private async updateSelectedMonth(date: Date) {
+    this.selectedDate = date
+    this.year = date.getFullYear()
+    this.month = date.getMonth() + 1
+
+    await this.getSourceData()
+    await this.calcFlows(this.year, this.month, date.getDate())
+    await this.loadMonthlyStatistics(this.year, this.month)
+    await this.loadBillsByMonth(this.year, this.month)
+
+    this.selectedMonthString = this.isCurrentMonth() ? '本月' : `${this.year}年${this.month}月`
   }
+
 
   async loadBills() {
     this.isLoading = true;
@@ -645,7 +650,22 @@ export default struct HomePage {
               this.selectedDate = value
               this.year = value.getFullYear()
               this.month = value.getMonth() + 1
+
+              // 日历数据刷新
               this.calcFlows(this.year, this.month, value.getDate())
+
+              // 顶部总收支刷新
+              this.loadMonthlyStatistics(this.year, this.month)
+
+              this.loadBillsByMonth(this.year, this.month)
+
+              // 同步顶部“x月支出”文字
+              const now = new Date()
+              if (this.year === now.getFullYear() && this.month === now.getMonth() + 1) {
+                this.selectedMonthString = '本月'
+              } else {
+                this.selectedMonthString = `${this.year}年${this.month}月`
+              }
             }
           })
         })
@@ -803,6 +823,7 @@ export default struct HomePage {
         .backgroundColor(Color.White)
         .justifyContent(FlexAlign.Center)
         .visibility(this.selectedDayFlow.flowDetails.length > 0 ? Visibility.Hidden : Visibility.Visible)
+
       }
       .height('100%')
       .width('100%')
@@ -812,49 +833,6 @@ export default struct HomePage {
         top: px2vp(this.topRectHeight)
       })
     }
-
-      // Column() {
-      //   FlowCalendar({
-      //     year: this.selectedDate.getFullYear(),
-      //     month: this.selectedDate.getMonth() + 1,
-      //     selectedDate: this.selectedDate,
-      //     calendarRefreshKey: this.calendarRefreshKey,
-      //   })
-      // }
-
-      // // 账单列表
-      // Column() {
-      //   if (this.isLoading) {
-      //     LoadingProgress()
-      //       .width(50)
-      //       .height(50)
-      //       .color('#666')
-      //   } else if (this.bills.length === 0) {
-      //     Column() {
-      //       Text('暂无账单记录').fontSize(16).margin({ top: 10 }).fontColor('#666')
-      //     }
-      //     .width('100%')
-      //     .height('70%')
-      //     .justifyContent(FlexAlign.Center)
-      //   } else {
-      //     List() {
-      //       ForEach(this.bills, (bill: BillRecord) => {
-      //         ListItem() {
-      //           this.billItemBuilder(bill)
-      //         }
-      //       })
-      //     }
-      //     .width('100%')
-      //     .layoutWeight(1)
-      //     .padding({ left: 5, right: 5 })
-      //   }
-      // }
-      // .margin({ top: 15 })
-      // .backgroundColor('#f5f5f5')
-      // .width('94%')
-      // .layoutWeight(1)
-      // .borderRadius(30)
-      // .padding({left:7,right:7,top:15})
 
     .height('100%')
     .width('100%')
