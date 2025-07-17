@@ -35,17 +35,19 @@ export default struct StatisticsPage{
   @Prop statsTabIndex: number;
   // 触发统计视图更新的计数器
   @Prop statsUpdateTrigger: number;
-
-
   @State chartData: ChartItem[] = [];
 
   @State defOptions: Options = new Options({})
 
+
+
   aboutToAppear() {
     // 初始化年份列表（近5年）
+    console.info('统计界面预刷新啦')
     const currentYear = new Date().getFullYear();
     this.yearList = Array.from<number, number>({length: 5}, (_, i) => currentYear - i);
     this.selectedYear = currentYear;
+    this.onPageShow();
   }
 
   onPageShow() {
@@ -101,32 +103,32 @@ export default struct StatisticsPage{
     }
   }
 
-  async loadStatistics() {
-    console.info('开始加载统计数据');
-    // 获取当前年月
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = now.getMonth() + 1;
-
-    // 构造当月开始和结束日期
-    const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
-    const lastDay = new Date(year, month, 0).getDate(); // 当月最后一天
-    const endDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
-
-    try {
-      // 获取当月总收支统计
-      this.statistics = await statisticsService.getStatistics({
-        startDate: startDate,
-        endDate: endDate
-      });
-      console.info(`当月统计数据: 收入${this.statistics.totalIncome}, 支出${this.statistics.totalExpense}`);
-
-      // 获取支出分类统计
-      this.loadCategoryStats(this.currentStatType, { startDate, endDate });
-    } catch (error) {
-      console.error(`加载统计数据失败: ${JSON.stringify(error)}`);
-    }
-  }
+  // async loadStatistics() {
+  //   console.info('开始加载统计数据');
+  //   // 获取当前年月
+  //   const now = new Date();
+  //   const year = now.getFullYear();
+  //   const month = now.getMonth() + 1;
+  //
+  //   // 构造当月开始和结束日期
+  //   const startDate = `${year}-${String(month).padStart(2, '0')}-01`;
+  //   const lastDay = new Date(year, month, 0).getDate(); // 当月最后一天
+  //   const endDate = `${year}-${String(month).padStart(2, '0')}-${String(lastDay).padStart(2, '0')}`;
+  //
+  //   try {
+  //     // 获取当月总收支统计
+  //     this.statistics = await statisticsService.getStatistics({
+  //       startDate: startDate,
+  //       endDate: endDate
+  //     });
+  //     console.info(`当月统计数据: 收入${this.statistics.totalIncome}, 支出${this.statistics.totalExpense}`);
+  //
+  //     // 获取支出分类统计
+  //     this.loadCategoryStats(this.currentStatType, { startDate, endDate });
+  //   } catch (error) {
+  //     console.error(`加载统计数据失败: ${JSON.stringify(error)}`);
+  //   }
+  // }
 
   async loadCategoryStats(type: '收入' | '支出', dateRange?: StatisticsOptions) {
 
@@ -634,9 +636,12 @@ export default struct StatisticsPage{
             //图表
 
             Column() {
-              //饼状图组件
-              McPieChart({ options: this.defOptions })
-                .height('170%') //设置图表区域的高度
+              if (this.chartData.length > 0) {
+                McPieChart({ options: this.defOptions })
+                  .height('170%')
+              } else {
+                Text('加载中...').fontSize(14).fontColor('#999').width('100%').textAlign(TextAlign.Center)
+              }
             }
             .height('35%')
             .width('100%')
