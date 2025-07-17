@@ -5,6 +5,9 @@ import relationalStore from '@ohos.data.relationalStore';
 import { Bill,QueryBillOptions } from '../common/models/Bill';
 import { billService } from '../common/AppServiceRegistry';
 import promptAction from '@ohos.promptAction';
+import { accountService } from '../common/AppServiceRegistry'
+import { Account, AccountRecord } from '../common/models/Account'
+
 
 interface BillRecord extends Bill {
   id: number;            // 数据库自增ID
@@ -86,7 +89,6 @@ export default struct AddAccounting{
   @State handlePopup1 : boolean = false
   @State handlePopup2 : boolean = false
   @State currentAccountId: number = 1; // 假设默认账户ID为1，实际应由前端账户选择器控制
-
 
 
   // // 初始化数据库
@@ -392,7 +394,41 @@ export default struct AddAccounting{
                   .selectedOptionFont({ size: 13, weight: 400 })
                   .optionFont({ size: 13, weight: 400 })
                   .onSelect((index: number) => {
-                    this.currentAccountId = index
+
+                    let idd : number = 0;
+                    switch (index){
+                      case  0: {
+                        accountService.getAccountByName('现金').then((account: AccountRecord) => {
+                          idd = account.id;
+                        });
+                        break;
+                      }
+                      case  1: {
+                        accountService.getAccountByName('银行卡').then((account: AccountRecord) => {
+                          idd = account.id;
+                        });
+                        break;
+                      }
+                      case  2: {
+                        accountService.getAccountByName('信用卡').then((account: AccountRecord) => {
+                          idd = account.id;
+                        });
+                        break;
+                      }
+                      case  3: {
+                        accountService.getAccountByName('支付宝').then((account: AccountRecord) => {
+                          idd = account.id;
+                        });
+                        break;
+                      }
+                      case  4: {
+                        accountService.getAccountByName('微信').then((account: AccountRecord) => {
+                          idd = account.id;
+                        });
+                        break;
+                      }
+                    }
+                    this.currentAccountId = idd;
                     console.info('Select:' + index)
                   })
               }
@@ -542,7 +578,40 @@ export default struct AddAccounting{
                   .selectedOptionFont({ size: 13, weight: 400 })
                   .optionFont({ size: 13, weight: 400 })
                   .onSelect((index: number) => {
-                    this.currentAccountId = index
+                    let idd : number = 0;
+                    switch (index){
+                      case  0: {
+                        accountService.getAccountByName('现金').then((account: AccountRecord) => {
+                          idd = account.id;
+                        });
+                        break;
+                      }
+                      case  1: {
+                        accountService.getAccountByName('银行卡').then((account: AccountRecord) => {
+                          idd = account.id;
+                        });
+                        break;
+                      }
+                      case  2: {
+                        accountService.getAccountByName('信用卡').then((account: AccountRecord) => {
+                          idd = account.id;
+                        });
+                        break;
+                      }
+                      case  3: {
+                        accountService.getAccountByName('支付宝').then((account: AccountRecord) => {
+                          idd = account.id;
+                        });
+                        break;
+                      }
+                      case  4: {
+                        accountService.getAccountByName('微信').then((account: AccountRecord) => {
+                          idd = account.id;
+                        });
+                        break;
+                      }
+                    }
+                    this.currentAccountId = idd;
                     console.info('Select:' + index)
                   })
 
