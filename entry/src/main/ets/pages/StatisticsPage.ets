@@ -1,6 +1,12 @@
 import { billService, statisticsService } from '../common/AppServiceRegistry';
 import { BillRecord, CategoryStatItem, StatisticsOptions, StatisticsResult } from '../common/models/Bill';
 import { promptAction } from '@kit.ArkUI';
+import { McPieChart, Options } from '@mcui/mccharts'
+
+interface ChartItem {
+  name: string;
+  value: number;
+}
 
 @Entry
 @Component
@@ -28,6 +34,64 @@ export default struct StatisticsPage{
   @Prop statsTabIndex: number;
   // 触发统计视图更新的计数器
   @Prop statsUpdateTrigger: number;
+
+
+  @State chartData: ChartItem[] = [];
+
+  @State defOptions: Options = new Options({
+    //调色盘颜色列表
+    color: ['#caceb5', '#bbaab8', '#6f9f9c', '#e2d8af',
+      '#929b80', '#95bccc', '#afac9b', '#697a98',
+      '#676966', '#e1a36f', '#88845f', '#84a59d',
+      '#ff059cca'],
+    //设置图例的相关样式与功能
+    legend: {
+      top: '1%', //图例距离顶部侧位置
+      itemWidth: 10, //图形的宽度
+      itemHeight: 10, //图形的高度
+      textStyle: {
+        //文本样式配置
+        color: '#ff029cdd', //字体颜色
+        fontSize: 30, //字体大小
+        fontWeight: '800' //字体粗细
+      }
+    },
+    title: {
+      show: true,
+      text: this.currentStatType+'数据占比', // 主标题文本
+      subtext: '', // 副标题文本
+      top: '30%',
+      fontSize: 20, //字体大小
+    },
+    series: [
+      {
+        radius: ['50%', '35%'], // 饼图外半径、内半径
+        center: ['50%', '75%'], // 饼图中心位置
+        data: this.chartData,
+        labelLine: {
+          //文本连接线样式配置
+          length: 25, //连接线1的长度
+          length2: 30, //连接线2的长度
+          lineStyle: {
+            //提示线样式
+            width: 1, //线宽度
+            color: '#effffb' //线颜色
+          }
+        },
+        label: {
+          //系列文本标签样式配置
+          show: true, //是否显示文本标签
+          fontWeight: '800', //字体粗细
+          fontFamily: 'sans-serif',
+          color: '#ffffffff', //字体颜色
+          position: 'outside', //文本显示位置
+          fontSize: 30, //字体大小
+          distanceToLabelLine: 6 //字体与饼状间距
+        },
+      }
+    ],
+
+  })
 
   aboutToAppear() {
     // 初始化年份列表（近5年）
@@ -117,10 +181,75 @@ export default struct StatisticsPage{
   }
 
   async loadCategoryStats(type: '收入' | '支出', dateRange?: StatisticsOptions) {
-    this.currentStatType = type;
 
+    this.currentStatType = type;
+    //清空残留数据
+    this.categoryStats = [];
+    this.chartData = [];
     // 更新月度统计数据
     this.categoryStats = await statisticsService.getCategoryStatistics(type, dateRange);
+
+    this.chartData = this.categoryStats.map((item: CategoryStatItem) => {
+      return {
+        name: item.category,
+        value: item.total
+      } as ChartItem;
+    });
+
+    this.defOptions = new Options({
+      //调色盘颜色列表
+      color: ['#caceb5', '#bbaab8', '#e1a36f', '#e2d8af',
+        '#929b80', '#95bccc', '#afac9b', '#697a98',
+        '#676966', '#6f9f9c', '#88845f', '#84a59d',
+        '#ff059cca'],
+      //设置图例的相关样式与功能
+      legend: {
+        top: '3%', //图例距离顶部侧位置
+        itemWidth: 10, //图形的宽度
+        itemHeight: 10, //图形的高度
+        textStyle: {
+          //文本样式配置
+          color: '#233c4b', //字体颜色
+          fontSize: 30, //字体大小
+          fontWeight: '800' //字体粗细
+        }
+      },
+      title: {
+        show: true,
+        text: this.currentStatType+'数据占比', // 主标题文本
+        subtext: '', // 副标题文本
+        top: '30%',
+        fontSize: 20, //字体大小
+      },
+      series: [
+        {
+          radius: ['50%', '35%'], // 饼图外半径、内半径
+          center: ['50%', '32%'], // 饼图中心位置
+          data: this.chartData,
+          labelLine: {
+            //文本连接线样式配置
+            length: 25, //连接线1的长度
+            length2: 30, //连接线2的长度
+            lineStyle: {
+              //提示线样式
+              width: 1, //线宽度
+              color: '#effffb' //线颜色
+            }
+          },
+          label: {
+            //系列文本标签样式配置
+            show: true, //是否显示文本标签
+            fontWeight: '800', //字体粗细
+            fontFamily: 'sans-serif',
+            color: '#ffffffff', //字体颜色
+            position: 'outside', //文本显示位置
+            fontSize: 30, //字体大小
+            distanceToLabelLine: 6 //字体与饼状间距
+          },
+        }
+      ],
+    });
+
 
     // 如果是在统计页面，同时更新年度统计
     if (this.currentIndex === 1) {
@@ -203,7 +332,7 @@ export default struct StatisticsPage{
           .maxLines(1)
           .textOverflow({ overflow: TextOverflow.MARQUEE })
           .fontWeight(FontWeight.Bold)
-          .fontColor(bill.type === '支出' ? '#f53f3f' : '#07c160')
+          .fontColor(bill.type === '支出' ? '#07c160' : '#f53f3f')
       }
       .width('25%')
       .margin({right:5})
@@ -264,7 +393,7 @@ export default struct StatisticsPage{
             Row()
               .width(`${total > 0 ? (item.total / total) * 100 : 0}%`)
               .height(10)
-              .backgroundColor(this.currentStatType === '支出' ? '#f53f3f' : '#07c160')
+              .backgroundColor(this.currentStatType === '支出' ? '#07c160' : '#f53f3f')
               .borderRadius(10)
           }
           .width('80%')
@@ -286,7 +415,7 @@ export default struct StatisticsPage{
 
       Text(`￥${item.total.toFixed(2)}`)
         .fontSize(16)
-        .fontColor(this.currentStatType === '支出' ? '#f53f3f' : '#07c160')
+        .fontColor(this.currentStatType === '支出' ? '#07c160' : '#f53f3f')
         .width('35%')
         .maxLines(1)
         .textOverflow({ overflow: TextOverflow.MARQUEE })
@@ -328,6 +457,8 @@ export default struct StatisticsPage{
 
       // 获取年度分类统计
       this.yearlyStats = await statisticsService.getCategoryStatistics(this.currentStatType, options);
+      //刷新
+      await this.loadCategoryStats(this.currentStatType, options);
 
       // 递增触发器，强制UI更新
       this.statsUpdateTrigger++;
@@ -339,6 +470,9 @@ export default struct StatisticsPage{
   // 加载月度统计数据
   async loadMonthlyStatistics(year: number, month: number) {
     console.info(`开始加载${year}年${month}月统计数据`);
+    //清空数据
+    this.categoryStats = [];
+    this.chartData = [];
 
     // 确保month和year是有效的数字
     const yearNum = Number(year);
@@ -368,7 +502,9 @@ export default struct StatisticsPage{
       console.info(`${yearNum}年${monthNum}月统计数据: 收入${this.statistics.totalIncome}, 支出${this.statistics.totalExpense}`);
 
       // 获取月度分类统计
-      this.categoryStats = await statisticsService.getCategoryStatistics(this.currentStatType, options);
+      //this.categoryStats = await statisticsService.getCategoryStatistics(this.currentStatType, options);
+
+      await this.loadCategoryStats(this.currentStatType, options);
 
       // 递增触发器，强制UI更新
       this.statsUpdateTrigger++;
@@ -479,7 +615,13 @@ export default struct StatisticsPage{
             .height(28)
             .onClick((): void => {
               this.loadCategoryStats('支出');
-              this.loadYearlyStatistics(this.selectedYear);
+              if (this.statsTabIndex === 1) {
+                // 只有在年度页才加载年度统计
+                this.loadYearlyStatistics(this.selectedYear);
+              } else {
+                // 月度页刷新当前月度数据
+                this.loadMonthlyStatistics(this.selectedYear, this.statsSelectedMonth);
+              }
             })
 
           Button('收入')
@@ -489,7 +631,13 @@ export default struct StatisticsPage{
             .height(28)
             .onClick((): void => {
               this.loadCategoryStats('收入');
-              this.loadYearlyStatistics(this.selectedYear);
+              if (this.statsTabIndex === 1) {
+                // 只有在年度页才加载年度统计
+                this.loadYearlyStatistics(this.selectedYear);
+              } else {
+                // 月度页刷新当前月度数据
+                this.loadMonthlyStatistics(this.selectedYear, this.statsSelectedMonth);
+              }
             })
         }
       }
@@ -509,7 +657,7 @@ export default struct StatisticsPage{
                 Text(`${this.statsSelectedMonth}月支出`).fontSize(14).fontColor('#666')
                 Text(`￥${this.statistics.totalExpense.toFixed(2)}`)
                   .fontSize(24)
-                  .fontColor('#f53f3f')
+                  .fontColor('#07c160')
                   .textOverflow({ overflow: TextOverflow.MARQUEE })
               }
               .width('50%')
@@ -519,7 +667,7 @@ export default struct StatisticsPage{
                 Text(`${this.statsSelectedMonth}月收入`).fontSize(14).fontColor('#666')
                 Text(`￥${this.statistics.totalIncome.toFixed(2)}`)
                   .fontSize(24)
-                  .fontColor('#07c160')
+                  .fontColor('#f53f3f')
                   .textOverflow({ overflow: TextOverflow.MARQUEE })
               }
               .width('50%')
@@ -529,6 +677,15 @@ export default struct StatisticsPage{
             .margin({ bottom: 10 })
             .backgroundColor(Color.White)
             .borderRadius(15)
+            //图表
+
+            Column() {
+              //饼状图组件
+              McPieChart({ options: this.defOptions })
+                .height('170%') //设置图表区域的高度
+            }
+            .height('35%')
+            .width('100%')
 
             // 分类统计图表
             Column() {
@@ -580,7 +737,7 @@ export default struct StatisticsPage{
             Row() {
               Column() {
                 Text(`${this.selectedYear}年支出`).fontSize(14).fontColor('#666')
-                Text(`￥${this.yearlyStatistics.totalExpense.toFixed(2)}`).fontSize(24).fontColor('#f53f3f')
+                Text(`￥${this.yearlyStatistics.totalExpense.toFixed(2)}`).fontSize(24).fontColor('#07c160')
                   .textOverflow({ overflow: TextOverflow.MARQUEE })
               }
               .width('50%')
@@ -588,7 +745,7 @@ export default struct StatisticsPage{
 
               Column() {
                 Text(`${this.selectedYear}年收入`).fontSize(14).fontColor('#666')
-                Text(`￥${this.yearlyStatistics.totalIncome.toFixed(2)}`).fontSize(24).fontColor('#07c160')
+                Text(`￥${this.yearlyStatistics.totalIncome.toFixed(2)}`).fontSize(24).fontColor('#f53f3f')
                   .textOverflow({ overflow: TextOverflow.MARQUEE })
               }
               .width('50%')
@@ -598,6 +755,15 @@ export default struct StatisticsPage{
             .margin({ bottom: 10 })
             .backgroundColor(Color.White)
             .borderRadius(15)
+            //图表
+
+            Column() {
+              //饼状图组件
+              McPieChart({ options: this.defOptions })
+                .height('170%') //设置图表区域的高度
+            }
+            .height('35%')
+            .width('100%')
 
             // 年度分类统计图表
             Column() {
