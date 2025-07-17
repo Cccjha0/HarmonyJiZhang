@@ -1,6 +1,5 @@
 import { billService, statisticsService } from '../common/AppServiceRegistry';
 import { BillRecord, CategoryStatItem, StatisticsOptions, StatisticsResult } from '../common/models/Bill';
-import { FlowCalendar } from '../pages/FlowCalendar'
 import { promptAction } from '@kit.ArkUI';
 
 import { BillCell, BillDetail, WEEKS } from '../model/SourceDataModel';
@@ -555,45 +554,6 @@ export default struct HomePage {
         Column() {
           Row() {
             Text(this.isCurrentMonth() ? '本月支出:' : `${this.selectedMonthString}支出:`).fontSize(18).margin({ left: 10, bottom: 10 })
-            //月份选择器（日期选择挡掉"日"部分），文本显示当前月，显示本月支出，选择月份后显示x月支出，账单表更新为x月的账单
-            // DatePicker({
-            //   start: new Date('1970-1-1'),
-            //   end: new Date('2100-1-1'),
-            //   selected: this.selectedDate
-            // })
-            //   .position({x:220,y:-15})
-            //   .selectedTextStyle({
-            //     color:Color.Black,
-            //     font:{size:15}
-            //   })
-            //   .textStyle({
-            //     color:'#cdcdcd',
-            //     font:{size:13}
-            //   })
-            //   .width(160)
-            //   .height(140)
-            //   .onDateChange((value: Date) => {
-            //     this.selectedDate = value;
-            //     // 设置年份和月份（月份从0开始计数）
-            //     const year = value.getFullYear();
-            //     const month = value.getMonth() + 1;
-            //     this.selectedMonth = month;
-            //
-            //     // 判断是否是当前月份,当前月份显示"本月"
-            //     if (this.isCurrentMonth()) {
-            //       this.selectedMonthString = `本月`;
-            //     } else {
-            //       this.selectedMonthString = `${year}年${month}月`;
-            //     }
-            //
-            //     this.loadBillsByMonth(year, month);
-            //
-            //     this.calendarRefreshKey++;
-            //
-            //   })
-            // //用来挡掉日期选择器的"日"部分
-            // Column(){}.position({x:'97%',y:-15}).backgroundColor(Color.White).width(50).height(140).zIndex(2)
-            // //
           }
           Text(`￥${this.statistics.totalExpense.toFixed(2)}`)
             .fontSize(35)

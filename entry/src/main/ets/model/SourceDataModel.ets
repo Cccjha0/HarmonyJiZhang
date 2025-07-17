@@ -14,39 +14,7 @@
  */
 
 import { BillRecord } from '../common/models/Bill'
-import { AccountRecord } from '../common/models/Account'
 import { billService, accountService } from '../common/AppServiceRegistry';
-
-// Bill {
-//   id:
-//   date: string;
-//   type: '收入' | '支出';
-//   category: string;
-//   amount: number;
-//   remark?: string;
-//   accountId: number;
-// }
-
-// export class SourceData {
-//   isIncome: boolean = false
-//   title: string = ''
-//   amount: number = 0.0
-//   paymentMethod: string = '现金'
-//   account: string = ''
-//   payDate: Date = new Date()
-//   icon: Resource = $r('app.media.heart')
-//
-//   constructor(isIncome: boolean, title: string, amount: number, paymentMethod: string, account: string, payDate: Date,
-//     icon: Resource) {
-//     this.isIncome = isIncome
-//     this.title = title
-//     this.amount = amount
-//     this.paymentMethod = paymentMethod
-//     this.account = account
-//     this.payDate = payDate
-//     this.icon = icon
-//   }
-// }
 
 const CATEGORY_ICON_MAP: Record<string, Resource> = {
   '餐饮': $r('app.media.cy'),
@@ -127,15 +95,5 @@ export class BillCell {
     this.cellFontColor = cellFontColor
   }
 }
-
-// 原始数据
-// export const SOURCE_DATA: Array<SourceData> = [
-//   new SourceData(false, '慈善捐助', 10.0, '现金', '159****1700', new Date(2025, 5, 12, 9, 24), $r('app.media.heart')),
-//   new SourceData(false, '晚餐', 24.3, '现金', '159****1700', new Date(2025, 5, 12, 18, 23), $r('app.media.knives')),
-//   new SourceData(true, '工资', 3000.0, '现金', '159****1700', new Date(2025, 5, 15, 15, 39), $r('app.media.heart')),
-//   new SourceData(false, '午餐', 56.8, '现金', '159****1700', new Date(2025, 5, 15, 11, 39), $r('app.media.knives')),
-//   new SourceData(true, '退款', 123.0, '现金', '159****1700', new Date(2025, 5, 25, 10, 35), $r('app.media.heart')),
-//   new SourceData(false, '晚餐', 56.8, '现金', '159****1700', new Date(2025, 5, 25, 17, 59), $r('app.media.knives'))
-// ]
 
 export const WEEKS: string[] = ['日', '一', '二', '三', '四', '五', '六']
