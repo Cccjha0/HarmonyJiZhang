@@ -240,7 +240,7 @@ export default struct AddAccounting{
       ? categoryNames[this.iconCurrentIndex] 
       : '其他';
     
-    console.info(`保存支出账单，金额: ${this.amount}, 类别: ${category}, 账户: ${this.currentAccountId}`);
+    console.info(`保存支出账单，金额: ${this.amount}, 类别: ${category}`);
     
     const bill: Bill = {
       date: this.formatDate(this.selectedDate),

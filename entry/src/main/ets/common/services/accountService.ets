@@ -66,6 +66,7 @@ export class AccountService {
           type: resultSet.getString(resultSet.getColumnIndex('TYPE'))
         };
         resultSet.close();
+        console.warn(`找到名称为 ${name} 的账户，id为 ${account.id} `);
         return account;
       } else {
         resultSet.close();
