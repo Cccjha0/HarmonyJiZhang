@@ -25,12 +25,6 @@ class DeleteDialogParams {
 @Entry
 @Component
 struct Index {
-  aboutToAppear() {
-    // 页面一显示就跳转到Tabss页面
-    router.pushUrl({
-      url: "pages/Tabss"
-    });
-  }
 
   build() {
     //必须有一个布局容器组件
@@ -38,8 +32,6 @@ struct Index {
       Tabss();
     }.width('100%')
     .height('100%')
-    //整个窗口背景为灰白
-    .backgroundColor('#eee')
   }
 }
 
