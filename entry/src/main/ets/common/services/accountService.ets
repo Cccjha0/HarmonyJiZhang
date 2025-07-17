@@ -85,11 +85,20 @@ export class AccountService {
    * 通过AccountId获取账户
    */
   async getAccountById(accountId: number): Promise<AccountRecord> {
+    console.debug('getAccountById:' + accountId);
     const predicates = new relationalStore.RdbPredicates(this.accountTable);
     predicates.equalTo('ACCOUNT_ID', accountId);
 
     try {
       const resultSet = await this.rdbStore.query(predicates, ['ACCOUNT_ID', 'NAME', 'TYPE']);
+
+      if (resultSet.rowCount === 0) {
+        console.error(`未找到账户记录，accountId=${accountId}`);
+        resultSet.close();
+        return {} as AccountRecord;
+      }
+
+      resultSet.goToFirstRow();  // ✅ 注意要跳到第一行
       const account: AccountRecord = {
         id: resultSet.getDouble(resultSet.getColumnIndex('ACCOUNT_ID')),
         name: resultSet.getString(resultSet.getColumnIndex('NAME')),
@@ -104,6 +113,7 @@ export class AccountService {
       return {} as AccountRecord;
     }
   }
+
 
   /**
    * 获取所有账户
