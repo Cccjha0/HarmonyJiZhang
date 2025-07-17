@@ -5,6 +5,7 @@ import Add from '../pages/AddAccounting';
 import { AccountPage } from '../pages/AccountPage';
 import { BillRecord, CategoryStatItem, StatisticsOptions, StatisticsResult } from "../common/models/Bill";
 import { billService, statisticsService } from "../common/AppServiceRegistry";
+import WordPage from "./WordPage";
 
 @Entry
 @Component
@@ -502,7 +503,7 @@ export default struct Tabss {
 
         //空
         TabContent(){
-         // About();
+         WordPage();
         }.tabBar({icon:$r('app.media.xxxHolic4'),text:"关于"})
       }.onChange((index: number): void => {
         this.currentIndex = index;

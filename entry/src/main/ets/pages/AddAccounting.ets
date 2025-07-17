@@ -298,15 +298,15 @@ export default struct AddAccounting{
   build() {
     Column(){
       // 标题返回部分
-      Row(){
-        Image($r('app.media.back')).width(35).height(35).margin({left:15,right:10})
-          .onClick(()=>{
-            router.back()
-          })
-        Text('添加账单').fontSize(20).fontWeight(600)
-      }.justifyContent(FlexAlign.Start)
-      .width('100%')
-      .margin({bottom:20,top:15,left:10})
+      // Row(){
+      //   Image($r('app.media.back')).width(35).height(35).margin({left:15,right:10})
+      //     .onClick(()=>{
+      //       router.back()
+      //     })
+      //   Text('添加账单').fontSize(20).fontWeight(600)
+      // }.justifyContent(FlexAlign.Start)
+      // .width('100%')
+      // .margin({bottom:20,top:15,left:10})
 
       Tabs(){
         ///////////////////////////////////////////////////////////////////////////////////////////

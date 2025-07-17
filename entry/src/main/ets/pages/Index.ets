@@ -5,6 +5,10 @@ import promptAction from '@ohos.promptAction';
 import { billService, statisticsService } from '../common/AppServiceRegistry'
 import Tabss from './Tabss';
 
+
+AppStorage.Set('username', AppStorage.Get('username') ?? '未登录用户')
+AppStorage.Set('avatarPath', AppStorage.Get('avatarPath') ?? 'app.media.default_avatar')
+
 //选择器选项接口
 interface SelectOption {
   value: string;

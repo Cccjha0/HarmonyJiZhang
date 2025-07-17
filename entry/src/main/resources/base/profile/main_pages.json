@@ -4,8 +4,15 @@
     "pages/AddAccounting",
     "pages/StatisticsPage",
     "pages/Tabss",
-    "pages/HomePage",
     "pages/PaymentDetailPage",
-    "pages/AccountPage"
+    "pages/AccountPage",
+    "pages/HomePage",
+    "pages/WordPage",
+    "pages/TryPage",
+    "pages/WordPages/StoryPage",
+    "pages/WordPages/UpdatePage",
+    "pages/WordPages/QuestionPage",
+    "pages/WordPages/AssociationPage",
+    "pages/WordPages/UserPage"
   ]
 }
