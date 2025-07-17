@@ -218,6 +218,12 @@ export default struct AddAccounting{
     }
   }
 
+  async getAccountIdByIndex(index: number): Promise<number> {
+    const nameList = ['现金', '银行卡', '信用卡', '支付宝', '微信'];
+    const account = await accountService.getAccountByName(nameList[index]);
+    this.currentAccountId = account.id;
+    return account.id;
+}
 
   // 保存支出账单
   async saveExpenseBill(): Promise<InsertResult> {
@@ -395,41 +401,10 @@ export default struct AddAccounting{
                   .optionFont({ size: 13, weight: 400 })
                   .onSelect((index: number) => {
 
-                    let idd : number = 0;
-                    switch (index){
-                      case  0: {
-                        accountService.getAccountByName('现金').then((account: AccountRecord) => {
-                          idd = account.id;
-                        });
-                        break;
-                      }
-                      case  1: {
-                        accountService.getAccountByName('银行卡').then((account: AccountRecord) => {
-                          idd = account.id;
-                        });
-                        break;
-                      }
-                      case  2: {
-                        accountService.getAccountByName('信用卡').then((account: AccountRecord) => {
-                          idd = account.id;
-                        });
-                        break;
-                      }
-                      case  3: {
-                        accountService.getAccountByName('支付宝').then((account: AccountRecord) => {
-                          idd = account.id;
-                        });
-                        break;
-                      }
-                      case  4: {
-                        accountService.getAccountByName('微信').then((account: AccountRecord) => {
-                          idd = account.id;
-                        });
-                        break;
-                      }
-                    }
-                    this.currentAccountId = idd;
-                    console.info('Select:' + index)
+                    this.getAccountIdByIndex(index).then((idd: number) => {
+                      console.log('账户ID:', idd);
+                    });
+                    console.info('Select now 现在 rightnow:' + this.currentAccountId)
                   })
               }
               .width('90%')
