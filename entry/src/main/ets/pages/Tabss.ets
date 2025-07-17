@@ -35,12 +35,9 @@ export default struct Tabss {
     const currentYear = new Date().getFullYear();
     this.yearList = Array.from<number, number>({length: 5}, (_, i) => currentYear - i);
     this.selectedYear = currentYear;
-  }
 
-  onPageShow() {
     // 获取当前日期并更新状态
     const now = new Date();
-    const currentYear = now.getFullYear();
     const currentMonth = now.getMonth() + 1;
 
     this.selectedDate = now;

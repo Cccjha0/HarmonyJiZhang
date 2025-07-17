@@ -33,17 +33,13 @@ struct Index {
   }
 
   build() {
-    // 可以显示个跳转中的提示
+    //必须有一个布局容器组件
     Column() {
-      Text('正在跳转...')
-        .fontSize(16)
-        .fontColor('#999')
-    }
-    .width('100%')
+      Tabss();
+    }.width('100%')
     .height('100%')
-    .justifyContent(FlexAlign.Center)
-    .alignItems(HorizontalAlign.Center)
-    .backgroundColor('#fff')
+    //整个窗口背景为灰白
+    .backgroundColor('#eee')
   }
 }
 
