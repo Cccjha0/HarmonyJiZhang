@@ -96,7 +96,7 @@ export struct PaymentDetailPage {
       Text(`${bill.type === '支出' ? '-' : '+'}¥${bill.amount.toFixed(2)}`)
         .fontSize(16)
         .fontWeight(FontWeight.Medium)
-        .fontColor(bill.type === '支出' ? '#FF0000' : '#00CC00')
+        .fontColor(bill.type === '支出' ? '#00CC00' : '#FF0000')
     }
     .width('100%')
     .padding(16)
@@ -131,7 +131,7 @@ export struct PaymentDetailPage {
           Text(`¥${this.totalIncome.toFixed(2)}`)
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
-            .fontColor('#00CC00')
+            .fontColor('#FF0000')
             .margin({ top: 4 })
         }
         .layoutWeight(1)
@@ -149,7 +149,7 @@ export struct PaymentDetailPage {
           Text(`¥${this.totalExpense.toFixed(2)}`)
             .fontSize(20)
             .fontWeight(FontWeight.Bold)
-            .fontColor('#FF0000')
+            .fontColor('#00CC00')
             .margin({ top: 4 })
         }
         .layoutWeight(1)
