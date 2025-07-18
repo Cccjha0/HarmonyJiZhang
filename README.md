@@ -10,7 +10,7 @@
 
 <div align="center">
   <img src="screenshots/4.png" width="200" alt="分类管理"/>
-  <img src="screenshots/5.png" width="200" alt="分类管理"/>
+  <img src="screenshots/5.png" width="200" alt="5"/>
 </div>
 
 ## 所使用的技术栈
