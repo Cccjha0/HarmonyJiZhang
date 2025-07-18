@@ -6,9 +6,12 @@
   <img src="screenshots/1.png" width="200" alt="主界面"/>
   <img src="screenshots/2.png" width="200" alt="记账界面"/>
   <img src="screenshots/3.png" width="200" alt="统计图表"/>
-  <img src="screenshots/4.png" width="200" alt="分类管理"/>
 </div>
 
+<div align="center">
+  <img src="screenshots/4.png" width="200" alt="分类管理"/>
+  <img src="screenshots/5.png" width="200" alt="分类管理"/>
+</div>
 
 ## 所使用的技术栈
 
