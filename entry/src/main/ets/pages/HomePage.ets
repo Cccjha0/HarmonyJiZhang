@@ -729,55 +729,53 @@ export default struct HomePage {
         .size({ width: $r('app.float.width_max'), height: $r('app.float.height_subtitle2') })
         .margin({ left: $r('app.float.space_16'), right: $r('app.float.space_16') })
 
-        Column() {
-          ForEach(this.selectedDayFlow.flowDetails, (item: BillDetail, index: number) => {
-            Row() {
-              Image(item.icon)
-                .size({ width: $r('app.float.icon_size'), height: $r('app.float.icon_size') })
-                .margin({
-                  left: $r('app.float.space_12'),
-                  top: $r('app.float.space_20'),
-                  bottom: $r('app.float.space_20')
-                })
-                .align(Alignment.Center)
+        Scroll() {
+          Column() {
+            ForEach(this.selectedDayFlow.flowDetails, (item: BillDetail, index: number) => {
+              Row() {
+                Image(item.icon)
+                  .size({ width: $r('app.float.icon_size'), height: $r('app.float.icon_size') })
+                  .margin({
+                    left: $r('app.float.space_12'),
+                    top: $r('app.float.space_20'),
+                    bottom: $r('app.float.space_20')
+                  })
+                  .align(Alignment.Center)
 
-              Column() {
-                Text(item.title)
-                  .height($r('app.float.height_flow_title'))
-                  .fontWeight(CommonConstants.FONT_WEIGHT)
-                Text(item.detail)
-                  .height($r('app.float.height_flow_detail'))
-                  .font({ size: $r('app.float.font_size_usual') })
-                  .margin({ top: 2 })
+                Column() {
+                  Text(item.title)
+                    .height($r('app.float.height_flow_title'))
+                    .fontWeight(CommonConstants.FONT_WEIGHT)
+                  Text(item.detail)
+                    .height($r('app.float.height_flow_detail'))
+                    .font({ size: $r('app.float.font_size_usual') })
+                    .margin({ top: 2 })
+                }
+                .alignItems(HorizontalAlign.Start)
+                .margin({ left: $r('app.float.space_16'), top: $r('app.float.space_12'), bottom: $r('app.float.space_12') })
+
+                Column() {
+                  Text('￥' + item.amount.toString())
+                    .font({ size: $r('app.float.font_size_usual') })
+                    .fontWeight(FontWeight.Bold)
+                    .fontColor(item.isIncome ? '#f53f3f' : '#07c160')
+                    .textAlign(TextAlign.End)
+                }
+                .alignItems(HorizontalAlign.End)
+                .size({ width: $r('app.float.width_amount'), height: $r('app.float.height_amount') })
+                .margin({ top: $r('app.float.space_12'), bottom: $r('app.float.space_12') })
               }
-              .alignItems(HorizontalAlign.Start)
-              .margin({ left: $r('app.float.space_16'), top: $r('app.float.space_12'), bottom: $r('app.float.space_12') })
+              .size({ width: $r('app.float.width_max'), height: $r('app.float.height_flow_item') })
 
-              Column() {
-                Text('￥' + item.amount.toString())
-                  .font({ size: $r('app.float.font_size_usual') })
-                  .fontWeight(FontWeight.Bold)
-                  .fontColor(item.isIncome ? '#f53f3f' : '#07c160')
-                  .textAlign(TextAlign.End)
-              }
-              .alignItems(HorizontalAlign.End)
-              .size({ width: $r('app.float.width_amount'), height: $r('app.float.height_amount') })
-              .margin({ top: $r('app.float.space_12'), bottom: $r('app.float.space_12') })
-            }
-            .size({ width: $r('app.float.width_max'), height: $r('app.float.height_flow_item') })
-
-            Divider()
-              .width($r('app.float.width_divider'))
-              .strokeWidth(0.5)
-              .margin({ left: $r('app.float.divider_margin_left'), right: $r('app.float.space_12') })
-              .color(index === this.selectedDayFlow.flowDetails.length - 1 ? Color.White : Color.Gray)
-          })
+              Divider()
+                .width($r('app.float.width_divider'))
+                .strokeWidth(0.5)
+                .margin({ left: $r('app.float.divider_margin_left'), right: $r('app.float.space_12') })
+                .color(index === this.selectedDayFlow.flowDetails.length - 1 ? Color.White : Color.Gray)
+            })
+          }
         }
-        .width($r('app.float.width_max'))
-        .margin({ left: $r('app.float.space_16'), right: $r('app.float.space_16') })
-        .borderRadius($r('app.float.border_radius_12'))
-        .backgroundColor(Color.White)
-        .visibility(this.selectedDayFlow.flowDetails.length > 0 ? Visibility.Visible : Visibility.Hidden)
+
 
         Column() {
           Text($r('app.string.Not_available'))
